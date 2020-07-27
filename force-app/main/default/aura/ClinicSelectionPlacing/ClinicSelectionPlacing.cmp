@@ -1,0 +1,4 @@
+<aura:component implements="force:hasRecordId,force:hasSObjectName">
+    <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+	<iframe src="{!'/apex/ClinicSelectionPlacing?Id=' + v.recordId + '&amp;objType=' + v.sobjecttype}" frameborder="0" width="100%" height="600" scrolling="auto" allowfullscreen="true" />
+</aura:component>

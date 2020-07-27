@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" description="ReturnAppointmentDetailEvent" access="global">
+    <aura:attribute access="public" name="titleVal" type="String"/>
+    <aura:attribute access="public" name="descriptionVal" type="String"/>
+    <aura:attribute access="public" name="eventId" type="String"/>
+</aura:event>

@@ -1,0 +1,748 @@
+<apex:page standardController="Opportunity" extensions="ChooseClinicExtension" showHeader="false" sidebar="false" docType="html-5.0" >
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>
+        <title>Choose Clinic</title>
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS203, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css" />
+<!--        <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.print.css" />-->
+        <style type="text/css">
+            .slds .slds-hide{
+                display: none!Important;
+            }
+            .slds-no-background {
+                background: none;
+            }
+            .slds-textarea--no-resize {
+                resize: none!Important;
+                height: calc(1.875rem + (1px * 2));
+            }
+            .slds-white-space--normal {
+                white-space: normal;
+            }
+            select {
+                background-color: white;
+                color: #16325c;
+                border: 1px solid #d8dde6;
+                border-radius: 0.25rem;
+                width: 100%;
+                transition: border 0.1s linear, background-color 0.1s linear;
+                height: calc(1.875rem + (1px * 2));
+            }
+        </style>
+    </head>
+    
+    <body>
+        <!-- REQUIRED SLDS WRAPPER -->
+        <div class="medidate slds">   
+            <div class="medidate slds-page-header" role="banner">
+                <div class="medidate slds-grid">
+                    <div class="medidate slds-col slds-has-flexi-truncate">
+                        <div class="medidate slds-media">
+                            <div class="medidate slds-media__figure">
+                                <svg aria-hidden="true" class="medidate slds-icon slds-icon--large slds-icon-standard-user">
+                                    <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/custom-sprite/svg/symbols.svg#custom94')}"></use>
+                                </svg>
+                            </div>
+                            <div class="medidate slds-media__body">
+                                <p class="medidate slds-text-heading--label">Choose Clinic</p>
+                                <h1 class="medidate slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!opportunity.Name}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="medidate slds-grid slds-page-header__detail-row">
+                    <article class="medidate slds-card slds-size--1-of-1">
+                        <header class="medidate slds-card__header slds-grid">
+                            <div class="medidate slds-tile slds-media">
+                                <div class="medidate slds-media__figure">
+                                    <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-map">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/action-sprite/svg/symbols.svg#map')}"></use>
+                                    </svg>
+                                </div>
+                                <div class="medidate slds-media__body">
+                                    <h3 class="medidate slds-truncate" ><a href="javascript:void(0);">Map</a></h3>
+                                    <div class="medidate slds-tile__detail slds-text-body--small">
+                                        <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                            <li class="medidate slds-item">Nearby Clinics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="medidate slds-card__body slds-text-align--center">
+                            <div id="googleMap" style="width:100%; height: 300px"></div>
+                        </div>
+                    </article>
+                </div>
+                <div class="medidate slds-grid slds-page-header__detail-row" id="clinics-overview">
+                    <article class="medidate slds-card slds-size--1-of-1">
+                        <header class="medidate slds-card__header slds-grid">
+                            <div class="medidate slds-tile slds-media">
+                                <div class="medidate slds-media__figure">
+                                    <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-more">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/action-sprite/svg/symbols.svg#more')}"></use>
+                                    </svg>
+                                </div>
+                                <div class="medidate slds-media__body">
+                                    <h3 class="medidate slds-truncate" ><a href="javascript:void(0);">Clinics</a></h3>
+                                    <div class="medidate slds-tile__detail slds-text-body--small">
+                                        <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                            <li class="medidate slds-item">Bitte Klinik auswählen um Kalneder zu sehen</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="medidate slds-card__body slds-text-align--center">
+                            <table class="medidate slds-table slds-table--bordered slds-table--fixed-layout" role="grid">
+                                <thead>
+                                    <tr class="medidate slds-text-heading--label">
+                                        <th class="medidate slds-text-heading--label" scope="col" style="width:35px;white-space: normal;">
+                                            &nbsp;
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                            {!$ObjectType.ClinicProduct__c.fields.Clinic__c.Label}
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="width:120px;white-space: normal;">
+                                            {!$ObjectType.Account.fields.FullRevAccount__c.Label}
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="width:80px;white-space: normal;">
+                                            Entfernung
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                            &nbsp;Normal Preis
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                            Medidate Preis
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                            {!$ObjectType.ClinicProduct__c.fields.Product__c.Label}
+                                        </th>
+                                        <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                            verfügbare Termine (nächsten 21 Tage)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!clinics}" var="clinic">
+                                        <apex:repeat value="{!clinicProductsByClinicId[clinic.Id]}" var="clinicProduct">
+                                            <tr class="medidate slds-hint-parent">
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <input type="radio" name="clinicProd" value="{!clinicProduct.Id}" clinicCalendarId="{!clinicProduct.Clinic__r.ClinicCalendarID__c}" clinicName="{!clinicProduct.Clinic__r.Name}" clinicCity="{!clinicProduct.Clinic__r.ClinicCalendarKeyword__c}"/>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <a href="/{!clinicProduct.Clinic__c}" target="_blank">{!clinicProduct.Clinic__r.Name}</a>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <apex:outputField value="{!clinicProduct.Clinic__r.FullRevAccount__c}"/>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <div class="distance-{!clinicProduct.Clinic__c}"></div>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <apex:outputField value="{!clinicProduct.ClinicOperationNormalPrice__c}"/>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <apex:outputField value="{!clinicProduct.ClinicOperationMedidatePrice__c}"/>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <a id="lookup{!clinicProduct.id}CP" class="productDetailLink" href="/{!clinicProduct.id}" target="_blank"> 
+                                                        {!clinicProduct.Name}
+                                                    </a>
+                                                    <div class="slds-popover slds-nubbin--top-left" role="tooltip" style="position:absolute;top:40px;left:20px;display:none;">
+                                                        <div class="slds-popover__body">
+                                                        <div class="medidate slds-tile slds-media">
+                                                            <span class="slds-icon_container slds-icon-standard-account"> 
+                                                               <svg aria-hidden="true" class="slds-icon slds-icon--large">
+                                                                   <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/standard-sprite/svg/symbols.svg#product')}"></use>
+                                                               </svg>
+                                                            </span>
+                                                            <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-m-left--medium" ><a href="/{!clinicProduct.id}" target="_blank">{!clinicProduct.Name}</a></h1>
+                                                        </div>
+                                                        <ul class="slds-list--vertical-space-medium slds-m-left--xx-small">
+                                                            <apex:repeat value="{!$ObjectType.ClinicProduct__c.FieldSets.HoverFields}" var="hoverField">
+                                                                <li class="slds-item">
+                                                                    <div class="slds-text-title slds-m-top--medium"><a href="javascript:void(0);">{!hoverField.Label}</a></div>
+                                                                    <div class="slds-text-body--regular">{!clinicProduct[hoverField]}</div>
+                                                                </li>
+                                                            </apex:repeat>
+                                                        </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="medidate" style="white-space: normal;">
+                                                    <div class="appointments-{!clinicProduct.Clinic__r.Id}"></div>
+                                                </td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+                <div id="agenda" class="medidate slds-grid slds-page-header__detail-row slds-hide">
+                    <div class="medidate slds-size--1-of-1">
+                        <article class="medidate slds-card slds-size--1-of-1">
+                            <header class="medidate slds-card__header slds-grid">
+                                <div class="medidate slds-tile slds-media">
+                                    <div class="medidate slds-media__figure">
+                                        <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-log-event">
+                                            <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/action-sprite/svg/symbols.svg#log_event')}"></use>
+                                        </svg>
+                                    </div>
+                                    <div class="medidate slds-media__body">
+                                        <h3 id="agendaClinicName" class="medidate slds-truncate" ></h3>
+                                        <div class="medidate slds-tile__detail slds-text-body--small">
+                                            <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                                <li class="medidate slds-item">
+                                                    <a class="slds-button slds-button--icon" id="agendaLeft">
+                                                        <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                                            <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/utility-sprite/svg/symbols.svg#left')}"></use>
+                                                        </svg>
+                                                    </a>
+                                                    <a class="slds-button slds-button--icon" id="agendaRight">
+                                                        <svg aria-hidden="true" class="slds-button__icon slds-button__icon--large">
+                                                            <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/utility-sprite/svg/symbols.svg#right')}"></use>
+                                                        </svg>
+                                                    </a>
+                                                    <p id="agendaTitle"></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="medidate slds-card__body slds-text-align--center">
+                                <div id="agenda-output" class="medidate slds-hide slds-theme--default">
+                                    <div id="calendar">
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <apex:form id="pageForm">
+                    <div class="medidate slds-grid slds-page-header__detail-row">
+                        <article class="medidate slds-card slds-size--1-of-1">
+                            <header class="medidate slds-card__header slds-grid">
+                                <div class="medidate slds-tile slds-media">
+                                    <div class="medidate slds-media__figure">
+                                        <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-map">
+                                            <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/action-sprite/svg/symbols.svg#add_contact')}"></use>
+                                        </svg>
+                                    </div>
+                                    <div class="medidate slds-media__body">
+                                        <h3 class="medidate slds-truncate" ><a href="javascript:void(0);">Customer Information</a></h3>
+                                        <div class="medidate slds-tile__detail slds-text-body--small">
+                                            <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                                <li class="medidate slds-item">Get Details</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="medidate slds-card__body slds-p-around--small" style="background-color: white;">
+                                <div class="medidate slds-size--1-of-1">
+                                    <c:ChooseClinicDetails oppAccount="{!oppAccount}" opp="{!opp}"/>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <input id="eventId" name="eventId" type="text" class="medidate slds-hide"/>
+                    <input id="appointmentDate" name="appointmentDate" type="text" class="medidate slds-hide"/>
+                    <input id="clinicProductId" name="clinicProductId" type="text" class="medidate slds-hide"/>
+                    <input id="calendarTimeZone" name="calendarTimeZone" type="text" class="medidate slds-hide"/>
+                    <input id="input-focus" class="medidate slds-hide"/>
+                    <div class="medidate slds-grid slds-page-header__detail-row">
+                        <apex:commandButton styleClass="medidate slds-button slds-button--neutral saveButton" action="{!confirmAppointment}" value="Reservieren" id="theButton" oncomplete="redirectToOpp();" rerender="messages,pageRedirect"/>
+                    </div>
+                </apex:form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function initialize() {
+                var myOptions = { mapTypeId: google.maps.MapTypeId.ROADMAP};
+                var map = new google.maps.Map(document.getElementById("googleMap"), myOptions);
+                var bounds = new google.maps.LatLngBounds();
+                
+                if('{!oppAccount.BillingLatitude}' != '') {
+                    addPin(map, bounds, '{!oppAccount.BillingLatitude}', '{!oppAccount.BillingLongitude}', "{!oppAccount.FirstName}", "{!URLFOR($Resource.GoogleMapsMarkers, 'blue_MarkerP.png')}");
+                }
+                var myJq = jQuery.noConflict();
+                <apex:repeat value="{!clinics}" var="location" id="theRepeat">
+                    addPin(map, bounds, '{!location.ShippingLatitude}', '{!location.ShippingLongitude}', "{!location.Name}", "{!URLFOR($Resource.GoogleMapsMarkers, 'red_MarkerK.png')}");
+                    if('{!oppAccount.BillingLatitude}' != '') {
+                        var service = new google.maps.DistanceMatrixService;
+                        service.getDistanceMatrix({
+                                origins: [{lat: parseFloat('{!oppAccount.BillingLatitude}'), lng: parseFloat('{!oppAccount.BillingLongitude}')}],
+                                destinations: [{lat: parseFloat('{!location.ShippingLatitude}'), lng: parseFloat('{!location.ShippingLongitude}')}],
+                                travelMode: 'DRIVING',
+                                unitSystem: google.maps.UnitSystem.METRIC,
+                                avoidHighways: false,
+                                avoidTolls: false
+                            }, function(response, status) {
+                                if (status == 'OK') {
+                                    myJq(".distance-{!location.Id}").html(response.rows[0].elements[0].distance.text);
+                                }
+                            });
+                    }
+                </apex:repeat>
+                map.fitBounds(bounds);
+             }
+             
+             function addPin(map, bounds, latitude, longitude, title, image) {
+                var infowindow = new google.maps.InfoWindow({content: title});
+                var myLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: title,
+                    icon: image
+                });
+                marker.addListener('click', function() {infowindow.open(map, marker);});
+                bounds.extend(marker.getPosition());
+             }
+    
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPQZbhsPiFPvBt76BP1aG5G3RCMFYXVDg&signed_in=true&callback=initialize"></script>
+        <script src="https://apis.google.com/js/client.js?onload=onLoadCallback" async="defer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+        <script type="text/javascript">
+            var myJq = jQuery.noConflict();
+            // promise that would be resolved when gapi would be loaded
+var gapiPromise = (function(){
+  var deferred = myJq.Deferred();
+  window.onLoadCallback = function(){
+    deferred.resolve(gapi);
+  };
+  return deferred.promise()
+}());
+
+            myJq(document).ready(function() {
+                myJq('html, body').animate({
+                    scrollTop: myJq("#clinics-overview").offset().top
+                }, 500);
+                myJq('input[type=radio][name=clinicProd]').change(function() {
+                    agenda.calendarId = myJq(this).attr('clinicCalendarId');
+                    agenda.clinicName = myJq(this).attr('clinicName');
+                    agenda.clinicCity = myJq(this).attr('clinicCity');
+                    agenda.clinicProductId = myJq(this).val();
+                    agenda.timeMin = moment('{!TODAY()+1}').format('YYYY-MM-DD');
+                    agenda.timeMax = moment('{!TODAY()+31}').format('YYYY-MM-DD');
+                    gapiPromise.then(function(){
+                        checkAuth();
+                    });
+                });
+                loadAgendaEvents();
+                myJq('.saveButton').click(function() {
+                    //if('{!opp.ClinicProduct__c}' == '') {
+                        agenda.updateEvent();
+                    //}
+                });
+                //get number of app
+                //setNoOfAppointments();
+                gapiPromise.then(function(){
+                    setNoOfAppointments();
+                });
+                myJq('.dateFormat').remove();
+                console.log('{!opp.Clinic__c}');
+                if('{!opp.ClinicProduct__c}' != '') {
+                    myJq('input[type=radio][name=clinicProd]').prop('checked', true);
+                    agenda.calendarId = myJq('input[type=radio][name=clinicProd]').attr('clinicCalendarId');
+                    agenda.clinicName = myJq('input[type=radio][name=clinicProd]').attr('clinicName');
+                    agenda.clinicCity = myJq('input[type=radio][name=clinicProd]').attr('clinicCity');
+                    agenda.clinicProductId = myJq('input[type=radio][name=clinicProd]').val();
+                    agenda.timeMin = moment('{!TODAY()+1}').format('YYYY-MM-DD');
+                    agenda.timeMax = moment('{!TODAY()+31}').format('YYYY-MM-DD');
+                    myJq('#clinicProductId').val(agenda.clinicProductId);
+                    gapiPromise.then(function(){
+                        checkAuth();
+                    });
+                }
+            });
+            
+            function setNoOfAppointments() {
+                checkAuth1();
+            }
+            
+            function loadAgendaEvents() {
+                myJq('#agendaLeft').click(function (){
+                    myJq('#calendar').fullCalendar('prev');
+                    var referenceStart = myJq('#calendar').fullCalendar('getView').start;
+                    var referenceEnd = myJq('#calendar').fullCalendar('getView').end;
+                    (function(start, end) {
+                        agenda.timeMin = start.format('YYYY-MM-DD');
+                        agenda.timeMax = end.format('YYYY-MM-DD');
+                    })(referenceStart, referenceEnd);
+                    listUpcomingEvents();
+                });
+                myJq('#agendaRight').click(function (){
+                    myJq('#calendar').fullCalendar('next');
+                    var referenceStart = myJq('#calendar').fullCalendar('getView').start;
+                    var referenceEnd = myJq('#calendar').fullCalendar('getView').end;
+                    (function(start, end) {
+                        agenda.timeMin = start.format('YYYY-MM-DD');
+                        agenda.timeMax = end.format('YYYY-MM-DD');
+                    })(referenceStart, referenceEnd);
+                    listUpcomingEvents();
+                });
+            }
+            
+            /**
+             * Check if current user has authorized this application.
+             */
+            function checkAuth1() {
+            //console.log(gapi);
+            //console.log(gapi.auth);
+                var token = {
+                    access_token: '{!accessToken}'
+                };
+                gapi.auth.setToken(token);
+                loadCalendarApi1();
+            }
+    
+            /**
+             * Load Google Calendar client library. List upcoming events
+             * once client library is loaded.
+             */
+            function loadCalendarApi1() {
+                gapi.client.load('calendar', 'v3', listUpcomingEvents1);
+            }
+    
+            /**
+             * Print the summary and start datetime/date of the next ten events in
+             * the authorized user's calendar. If no events are found an
+             * appropriate message is printed.
+             */
+            function listUpcomingEvents1() {
+                var request;
+                <apex:repeat value="{!clinics}" var="clinic"> 
+                    request = gapi.client.calendar.events.list({
+                        'calendarId': '{!clinic.ClinicCalendarID__c}',
+                        'timeMin': moment('{!TODAY()+1}').format('YYYY-MM-DD') + 'T00:00:00+03:00',
+                        'timeMax': moment('{!TODAY()+22}').format('YYYY-MM-DD') + 'T23:59:59+03:00',
+                        'fields': 'items(description,end,start,status,summary,id)',
+                        'singleEvents': true,
+                        'orderBy': 'startTime'
+                    });
+                    request.execute(function(resp) {
+                        var events = resp.items;
+                        var openEvents = [];
+                        
+                        if (events && events.length > 0) {
+                            var hasOpenEvent;
+                            for (i = 0; i < events.length; i++) {
+                                var event = events[i];
+                                if(event.summary == '{!clinic.ClinicCalendarKeyword__c}' && 
+                                    event.start.dateTime && 
+                                    moment(event.start.dateTime).isAfter(moment('{!NOW()}'))
+                                ) {
+                                    openEvents.push(event);
+                                }
+                            }
+                            console.log(myJq('.appointments-{!clinic.Id}').text());
+                            if(openEvents.length > 0) {
+                                myJq('.appointments-{!clinic.Id}').text(openEvents.length);
+                            } else {
+                                myJq('.appointments-{!clinic.Id}').text('0');
+                            }
+                        } else {
+                            myJq('.appointments-{!clinic.Id}').text('0');
+                        }
+                    });
+                </apex:repeat>
+                
+            }
+            
+            /**
+             * Check if current user has authorized this application.
+             */
+            function checkAuth() {
+                var token = {
+                    access_token: '{!accessToken}'
+                };
+                gapi.auth.setToken(token);
+                loadCalendarApi();
+            }
+    
+            /**
+             * Load Google Calendar client library. List upcoming events
+             * once client library is loaded.
+             */
+            function loadCalendarApi() {
+                gapi.client.load('calendar', 'v3', listUpcomingEvents);
+            }
+    
+            /**
+             * Print the summary and start datetime/date of the next ten events in
+             * the authorized user's calendar. If no events are found an
+             * appropriate message is printed.
+             */
+            function listUpcomingEvents() {
+                console.log(agenda.timeMin);
+                console.log(agenda.timeMax);
+                var request = gapi.client.calendar.events.list({
+                    'calendarId': agenda.calendarId,
+                    'timeMin': agenda.timeMin + 'T00:00:00+03:00',
+                    'timeMax': agenda.timeMax + 'T23:59:59+03:00',
+                    'fields': 'items(description,end,start,status,summary,id),timeZone',
+                    'singleEvents': true,
+                    'orderBy': 'startTime'
+                });
+    
+                request.execute(function(resp) {
+                    var events = resp.items;
+                    var openEvents = [];
+                    if (events && events.length > 0) {
+                        agenda.timeZone = resp.timeZone;
+                        var hasOpenEvent;
+                        for (i = 0; i < events.length; i++) {
+                            var event = events[i];
+                            if((event.summary == agenda.clinicCity && 
+                                event.start.dateTime && 
+                                moment(event.start.dateTime).isAfter(moment('{!NOW()}'))) ||
+                                event.id == '{!opp.ClinicCalendarEventId__c}'
+                            ) {
+                                openEvents.push(event);
+                            }
+                        }
+                        if(openEvents.length > 0) {
+                            agenda.displayData(openEvents);
+                        } else {
+                            agenda.displayData([]);
+                        }
+                    } else {
+                        agenda.displayData([]);
+                    }
+                });
+            }
+            
+            agenda = {
+                calendarId : '',
+                timeMin: '',
+                timeMax: '',
+                clinicName: '',
+                clinicCity: '',
+                clinicProductId: '',
+                timeZone: '',
+                selectedEvent: {
+                    start: {
+                        dateTime : ''
+                    },
+                    end: {
+                        dateTime : ''
+                    },
+                    summary: ''
+                },
+                previousEvent: {
+                    start: {
+                        dateTime : ''
+                    },
+                    end: {
+                        dateTime : ''
+                    },
+                    summary: ''
+                },
+                selectedEventId: '',
+                previousEventId: '',
+                display : function() {
+                    myJq("#agenda").addClass("slds-show");
+                    myJq("#agenda").removeClass("slds-hide");
+                    myJq("#agendaClinicName").text('Agenda - ' + agenda.clinicName);
+                },
+                hide : function() {
+                    myJq("#agenda").addClass("slds-hide");
+                    myJq("#agenda").removeClass("slds-show");
+                },
+                displayData : function(events) {
+                    this.display();
+                    myJq("#agenda-output").addClass("slds-show");
+                    myJq("#agenda-output").removeClass("slds-hide");
+                    this.buildAgendaTable(events);
+                },
+                hideData : function() {
+                    myJq("#agenda-output").addClass("slds-hide");
+                    myJq("#agenda-output").removeClass("slds-show");
+                },
+                buildAgendaTable : function(events) {
+                    var calendarEvents = [];
+                    var color = '';
+                    var title ='';
+                    for (i = 0; i < events.length; i++) {
+                        if(events[i].id == '{!opp.ClinicCalendarEventId__c}') {
+                            color = '#c23934';
+                            title=events[i].summary + '_R_{!opp.Id}';
+                        } else {
+                            color = '#3a87ad';
+                            title=events[i].summary;
+                        }
+                        var calendarEvent = {
+                            title: title,
+                            start: events[i].start.dateTime,
+                            end: events[i].end.dateTime,
+                            id: events[i].id,
+                            color: color,
+                            textColor: 'white'
+                        };
+                        //calendarEvents.push(calendarEvent);
+                       /* if('{!opp.ClinicCalendarEventId__c}' !=null && '{!opp.AppointmentDate__c}' !=null && events[i].summary!=null)
+                            {
+                                //var str = "Berlin Frantzen Body_C_0065800000IMi2tAAD";
+                                //var num_matches = events[i].summary.match(/_/gi).length;
+                                var n = event.title.indexOf('_');
+                                var title;      
+                                if(n != -1 )
+                                {
+                                        title=events[i].summary + '_R_{!opp.Id}';
+                                        var calendarEvent1 = 
+                                {
+                                    title: title,
+                                    start: events[i].start.dateTime,
+                                    end: events[i].end.dateTime,
+                                    id: events[i].id,
+                                    color: color,
+                                    textColor: 'white'
+                                };
+                                
+                                }
+                                    
+                            }*/
+                            calendarEvents.push(calendarEvent);
+                           // calendarEvents.push(calendarEvent1);
+                        
+                    }
+                    myJq('#calendar').fullCalendar({
+                        header: false,
+                        editable: false,
+                        events: calendarEvents,
+                        firstDay: 1,
+                        allDaySlot: false,
+                        defaultView: 'month',
+                        nowIndicator: true,
+                        height: 800,
+                       eventClick: function(event, element) {
+                                var n = event.title.indexOf('_');
+                               /* if ('{!opp.ClinicCalendarEventId__c}' !=null && '{!opp.AppointmentDate__c}' !=null && n != -1 ){
+                                   event.title = event.title + '_R_{!opp.Id}';  
+                                   event.color = '#c23934'; 
+                                   agenda.selectedEvent.start.dateTime = event.start;
+                                   agenda.selectedEvent.end.dateTime = event.end;                                
+                                   agenda.selectedEvent.summary = event.title;  
+                                   agenda.selectedEventId = '{!opp.ClinicCalendarEventId__c}';
+                                   myJq('#eventId').val('{!opp.ClinicCalendarEventId__c}');
+                                   myJq('#appointmentDate').val(event.start.format('YYYY/MM/DD/HH/mm'));
+                                   myJq('#clinicProductId').val('{!opp.ClinicProduct__c}');
+                                   myJq('#calendarTimeZone').val('{!opp.CalendarTimeZone__c}');
+                                   myJq('#calendar').fullCalendar('updateEvent', event);
+                                   
+                                } else */ if(n != -1 ) { 
+                                console.log('Test1');       
+                                //update all other events summary
+                                event.title = event.title.substring(0, n);
+                                event.color = '#3a87ad';
+                                agenda.selectedEvent.start.dateTime = '';
+                                agenda.selectedEvent.end.dateTime = '';
+                                agenda.selectedEvent.summary = '';
+                                agenda.selectedEventId = '';
+                                myJq('#eventId').val('');
+                                myJq('#appointmentDate').val('');
+                                myJq('#clinicProductId').val('');
+                                myJq('#calendarTimeZone').val('');
+                                myJq('#calendar').fullCalendar('updateEvent', event);
+                                }else {
+                                resetEvents();
+                                console.log('Test2');
+                                event.title = event.title + '_R_{!opp.Id}';
+                                event.color = '#c23934';
+                                agenda.selectedEvent.start.dateTime = event.start;
+                                agenda.selectedEvent.end.dateTime = event.end;
+                                agenda.selectedEvent.summary = event.title;
+                                agenda.selectedEventId = event.id;
+                                myJq('#eventId').val(event.id);
+                                myJq('#appointmentDate').val(event.start.format('YYYY/MM/DD/HH/mm'));
+                                myJq('#clinicProductId').val(agenda.clinicProductId);
+                                myJq('#calendarTimeZone').val(agenda.timeZone);
+                                myJq('#calendar').fullCalendar('updateEvent', event);
+                                console.log(myJq('#eventId').val());
+                            }
+                            
+                        }
+                    });
+                    
+                    
+                    
+                    function resetEvents() {
+                        var sources = myJq('#calendar').fullCalendar('clientEvents');
+                        console.log('Test3');
+                        for (i = 0; i < sources.length; i++) {
+                            var n = sources[i].title.indexOf('_');
+                            sources[i].title = sources[i].title.substring(0, n != -1 ? n : sources[i].title.length);
+                            sources[i].color = '#3a87ad';
+                            if(n != -1 && sources[i].id == '{!opp.ClinicCalendarEventId__c}') {
+                                agenda.previousEvent.start.dateTime = sources[i].start;
+                                agenda.previousEvent.end.dateTime = sources[i].end;
+                                agenda.previousEvent.summary = sources[i].title;
+                                agenda.previousEventId = sources[i].id;
+                            }
+                            myJq('#calendar').fullCalendar('updateEvent', sources[i]);
+                        }
+                    }
+                    myJq('#calendar').fullCalendar('removeEventSources');
+                    myJq('#calendar').fullCalendar('addEventSource', calendarEvents);
+                    myJq('#calendar').fullCalendar('refetchEvents');
+                    myJq('#agendaTitle').text(myJq('#calendar').fullCalendar('getView').title);
+                    myJq('html, body').animate({
+                        scrollTop: myJq("#agenda").offset().top
+                    }, 500);
+                },
+                updateEvent: function() {
+                    var request = gapi.client.calendar.events.update({
+                        'calendarId': agenda.calendarId,
+                        'eventId': agenda.selectedEventId,
+                        'resource': agenda.selectedEvent
+                    });
+        
+                    request.execute(function(resp) {
+                        console.log(resp);
+                    });
+                    /*
+                    request = gapi.client.calendar.events.update({
+                        'calendarId': agenda.calendarId,
+                        'eventId': agenda.previousEventId,
+                        'resource': agenda.previousEvent
+                    });
+        
+                    request.execute(function(resp) {
+                        console.log(resp);
+                    });*/
+                }
+            };
+        </script>
+        <script>function setFocusOnLoad() {document.getElementById('input-focus').focus();}</script>
+        <apex:panelGroup id="pageRedirect">
+        <script>
+            function redirectToOpp() {
+            console.log("{!redirect}");
+                if("{!redirect}" == "redirect") {
+                    window.top.location = '/one/one.app?source=aloha#/sObject/{!opp.Id}/view?t=';
+                }
+            }
+            
+            myJq( document ).ready(function() {
+                myJq( ".productDetailLink" ).each(function( index ) {
+                    myJq( this ).mouseover(function() {
+                        myJq(this).siblings('.slds-popover').show();
+                    });
+                    myJq( this ).mouseout(function() {
+                        myJq(this).siblings('.slds-popover').hide();
+                    });
+                });
+            });
+        </script>
+        </apex:panelGroup>
+    </body>
+</html>
+</apex:page>

@@ -1,0 +1,344 @@
+<apex:component access="global">
+
+<apex:attribute name="payment" type="wrapperclass" description="the Payment" />
+<apex:attribute name="opportunity" type="Opportunity" description="the Payment Opportunity"/>
+
+
+    <div class="invoiceDiv" style="position:relative; height: 297mm; margin:0;font-family: Arial Unicode MS, sans-serif;font-size:9pt;">
+           <div style="margin : 0.2in .7in .1in .7in;">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <img src="{!$Resource.MedidateLogo}" alt="logo" border="0" width="200" height="26" style="display:block; border:none; outline:none; text-decoration:none;"/><br/>
+                        </td>   
+                    </tr>
+                </table>
+            </div>  
+            <hr style="height:2px;border-width:0;color:#1f636a;background-color:#1f636a;margin:0;width:100%"/>   
+            <br/>
+            <div style="margin : 0.3in .7in .1in .7in;">
+                <table width="100%">
+                    <tr>
+                    
+                        
+                        <td width="70%">
+                            <br/>
+                            <br/>
+                            eHealth MediDate GmbH | Torstraße 35 | 10119 Berlin <br/><br/><br/>
+                            <br/>
+                            <p style="margin-bottom:2px;margin-top:0px">{!payment.ClinicName}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!payment.ClinicBillingStreet}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!payment.ClinicBillingPostalCode} {!payment.ClinicBillingCity}</p>
+                        </td>
+                        
+                        <td rowspan="2">
+                            <table>
+                                <tr>
+                                    <td align="right">
+                                        <p style="margin-bottom:2px;margin-top:0px"></p>
+                                    </td>
+                                    <td width="5%">
+                                    </td>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">billing@medidate.de</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <p style="margin-bottom:2px;margin-top:0px"></p>
+                                    </td>
+                                    <td width="5%">
+                                    </td>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">www.medidate.de</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"> 
+                                        <p style="margin-bottom:2px;margin-top:0px">Service-Tel: </p>
+                                    </td>
+                                    <td/>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">030 548 822 39
+                                        <!--apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Body'}">030 / 220 119 93</apex:panelGroup><apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Lasik'}">030 / 208 478 96</apex:panelGroup-->
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <p style="margin-bottom:2px;margin-top:0px">Mo - Fr</p>
+                                    </td>
+                                    <td/>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">08:00 - 21:00 Uhr</p>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>    
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                               
+                            </table>
+                        </td>
+                    </tr>
+                </table> 
+                <br/><br/>
+                              
+                <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Paid' ||  payment.TransactionStatus == 'Refunded')}">
+                <table width="100%" style="border:1px solid black;border-collapse:collapse;width:100%">
+                    <tr>
+                    
+                        <td style="padding:5px 0px 5px 15px;border-collapse:collapse;">
+                        <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Paid')}">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Transferzahlung Voruntersuchungsgebühren</b></p>
+                         </apex:panelGroup> 
+                         <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Refunded')}">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Rückerstattung Voruntersuchungsgebühren</b></p>
+                         </apex:panelGroup>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                        </td>
+                        <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Paid')}">
+                        <td valign="top" style="padding:5px 0px 5px 15px;margin-left:5px;border-collapse:collapse;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Kundennummer: {!payment.cliniccode}</b></p>
+                            
+                             <!--p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Transferbelegnummer: T-VU-<apex:outputText value="{0, number, 00}">
+       <apex:param value="{!payment.month}" /></apex:outputText>{!payment.year}-{!payment.cliniccode}-{!payment.count}</b></p-->
+       <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Transferbelegnummer: T-VU-<apex:outputText value="{0, number, 00}">
+       <apex:param value="{!payment.month}" /></apex:outputText>{!payment.year}-{!payment.cliniccode}-1</b></p>
+                         
+                                    
+                          <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Datum: <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                <apex:param value="{!TODAY()}" /> 
+                                </apex:outputText></b>
+                            </p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                        </td>
+                        </apex:panelGroup>  
+                        <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Refunded')}">
+                          <td valign="top" style="padding:5px 0px 5px 15px;margin-left:5px;border-collapse:collapse;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Kundennummer: {!payment.cliniccode}</b></p>
+                             <!--p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Transferbelegnummer: S-T-VU-<apex:outputText value="{0, number, 00}">
+       <apex:param value="{!payment.month}" /></apex:outputText>{!payment.year}-{!payment.cliniccode}-{!payment.count}</b></p-->
+       <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Transferbelegnummer: S-T-VU-<apex:outputText value="{0, number, 00}">
+       <apex:param value="{!payment.month}" /></apex:outputText>{!payment.year}-{!payment.cliniccode}-1</b></p>
+                         
+                          <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Datum: <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                <apex:param value="{!TODAY()}" /> 
+                                </apex:outputText></b>
+                            </p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                        </td>
+                         </apex:panelGroup>
+                    </tr>
+                </table>
+                <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+                <br/><br/>
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Hiermit möchten wir Ihnen eine Zusammenfassung der Voruntersuchungsgebühren für die MediDate Patienten übermitteln.</p>
+                <br/><br/><br/>
+                
+<table width="100%">
+  <tr>
+    <th width="10%">Pos</th>
+    <th width="10%">Anz</th>
+    <th width="10%">Preis</th>
+    <th width="60%">Beschreibung</th>
+    <th width="10%">Betrag</th>
+ </tr>
+  <tr>
+    <td>1</td>
+    <td></td>
+    <td></td>
+    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Paid')}">
+                            <td>Voruntersuchungsgebühren<br/>MediDate Patienten<br/>{!payment.monthname} {!payment.year}</td>
+                         </apex:panelGroup> 
+                         <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Refunded')}">
+                            <td>Rückerstattung<br/>Voruntersuchungsgebühren<br/>MediDate Patienten<br/>{!payment.monthname} {!payment.year}</td>
+                         </apex:panelGroup>
+    
+    <td>{!payment.sum} €</td>
+   </tr>
+</table>
+ <br/>
+  <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+  <br/>
+  <table width="96%" >
+  <tr>
+      <td align="left">Gesamtbetrag
+      </td>
+      <td align="right" style="padding-left: 180px;">{!payment.sum} €
+      </td>
+  </tr>
+  </table>
+  <br/><br/>
+  <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Dies ist keine Rechnung.</b></p>
+  <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Paid')}">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Dieser Transferbeleg dient lediglich zu Ihrer Information über die in Ihrem Namen im Leitungszeitraum entgegengenommen und an Sie weitergeleitet Voruntersuchungsgebühren von MediDate Patienten.</p>
+                         </apex:panelGroup> 
+                         <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus == 'Refunded')}">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Dieser Transferbeleg dient lediglich zu Ihrer Information über die in Ihrem Namen im Leitungszeitraum entgegengenommen und Rückerstatteten Voruntersuchungsgebühren.</p>
+                         </apex:panelGroup>
+  <br/><br/>
+ </apex:panelGroup>
+ <apex:panelGroup layout="none" rendered="{!(payment.transactionstatus== 'Credit note')}">
+                <table width="100%" style="border:1px solid black;border-collapse:collapse;width:100%">
+                    <tr>
+                    
+                        <td style="padding:5px 0px 5px 15px;border-collapse:collapse;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Differenzgutschrift Voruntersuchungsgebühren</b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                        </td>
+                        <td valign="top" style="padding:5px 0px 5px 15px;margin-left:5px;border-collapse:collapse;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Kundennummer: {!payment.cliniccode}</b></p>
+                            <!--p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Gutschriftsnummer: G-VU-<apex:outputText value="{0, number, 00}">
+       <apex:param value="{!payment.month}" /></apex:outputText>{!payment.year}-{!payment.cliniccode}-{!payment.count}</b></p-->
+       <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Gutschriftsnummer: G-VU-<apex:outputText value="{0, number, 00}">
+       <apex:param value="{!payment.month}" /></apex:outputText>{!payment.year}-{!payment.cliniccode}-1</b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Datum: <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                <apex:param value="{!TODAY()}" /> 
+                                </apex:outputText></b>
+                            </p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b></b></p>
+                        </td>
+                    </tr>
+                </table>
+                <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+                <br/><br/>
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Wie vereinbart, möchten wir Ihnen hiermit die folgende Gutschrift übermitteln.</p>
+                <br/><br/><br/>
+                
+<table width="100%" >
+  <tr>
+    <th width="20%">Pos</th>
+    <th width="60%" align="center">Beschreibung</th>
+    <th width="20%" align="right">Netto</th>
+ </tr>
+  <tr>
+    <td>1</td>
+    <td align="center">Voruntersuchungsgebühren<br/>{!payment.monthname}-{!payment.year}<br/>Gutschrift für Differenz</td>
+    <td align="right">{!payment.netamount} €</td>
+   </tr>
+</table>
+ <br/>
+  <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+  <br/>
+  <table width="100%">
+  <tr>
+      <td align="left">Zwischensumme Netto
+      </td>
+      <td align="right">{!payment.netamount} €
+      </td>
+  </tr>
+  </table>
+  <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+  <table width="100%">
+  <tr>
+      <td align="left">USt (19,00%):
+      </td>
+      <td align="right">{!payment.vatamount} €
+      </td>
+  </tr>
+  <tr>
+      <td align="left">Gesamt Brutto
+      </td>
+      <td align="right">{!payment.sum} €
+      </td>
+  </tr>
+   </table>
+  <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+  <hr style="height:2px;border-width:0;color:#000000;background-color:#000000;margin:0;width:100%"/>
+ 
+  <br/><br/>
+  <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Sollten Sie Fragen zur Gutschrift oder zu weiteren Leistungen haben, können Sie sich gerne melden.</p>
+ <br/><br/>
+ </apex:panelGroup>
+  <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Vielen Dank für die Zusammenarbeit.</p>
+  
+  
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    Mit freundlichen Grüßen
+                </p>
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    MediDate
+                </p>
+            </div>
+            <br/>
+            <div class="footer" style="position:absolute; bottom:0;font-size:80%; width:100%; page-break-after: always;">
+                <center>
+                    <div style="margin : 0.3in .7in .1in .7in;">
+                        <table width="100%">
+                            <tr>
+                                <td colspan="3">
+                                     <hr style="height:0.5px;border-width:0;color:black;background-color:black;margin:0;width:100%"/>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    eHealth MediDate GmbH
+                                </td>
+                                <td align="left">
+                                    Geschäftsführung:
+                                </td>
+                                <td align="left">
+                                    Berliner Sparkasse
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    Torstraße 35
+                                </td>
+                                <td align="left">
+                                    Eiko Gerten
+                                </td>
+                                <td align="left">
+                                    SWIFT/BIC: BELADEDEBXX
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    10119 Berlin
+                                </td>
+                                <td align="left">
+                                    Nico Kutschenko
+                                </td>
+                                <td align="left">
+                                    IBAN: DE30 1005 0000 0190 3142 90
+                                </td>
+                               
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    UST-ID:DE296393874
+                                </td>
+                                <td align="left">
+                                    Fabian Löhmer
+                                </td>
+                                <td align="left">
+                                    BLZ: 10050000, Kontonummer:0190314290
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </center>
+            </div>
+    </div>
+
+</apex:component>

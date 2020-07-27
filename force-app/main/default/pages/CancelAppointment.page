@@ -1,0 +1,99 @@
+<apex:page standardController="Opportunity" extensions="CancelAppointmentExtension" showHeader="true" sidebar="true" docType="html-5.0" >
+<html>
+  <head>
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS203, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <style type="text/css">
+        .slds-hide{
+            display: none!Important;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.10/moment-timezone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/soap/ajax/35.0/connection.js"></script>
+    <script src="/soap/ajax/35.0/apex.js"></script>
+    <script type="text/javascript">
+        var myJq = jQuery.noConflict();
+        sforce.connection.sessionId = '{!$Api.Session_ID}';
+        var gapiPromise = (function(){
+          var deferred = myJq.Deferred();
+          window.onLoadCallback = function(){
+            deferred.resolve(gapi);
+          };
+          return deferred.promise()
+        }());
+        myJq(document).ready(function() {
+            gapiPromise.then(function(){
+                checkAuth();
+            });
+        })
+      /**
+       * Check if current user has authorized this application.
+       */
+      function checkAuth() {
+        var token = {
+            access_token: '{!accessToken}'
+        };
+        gapi.auth.setToken(token);
+        loadCalendarApi();
+      }
+
+      /**
+       * Load Google Calendar client library. List upcoming events
+       * once client library is loaded.
+       */
+      function loadCalendarApi() {
+        gapi.client.load('calendar', 'v3', updateEvent);
+      }
+
+      function updateEvent() {
+      console.log(moment('{!Opportunity.AppointmentDate__c}').tz("{!opp.CalendarTimeZone__c}").format('YYYY-MM-DDTH:m:sZ'));
+            var selectedEvent= {
+                start: {
+                    dateTime : moment('{!Opportunity.AppointmentDate__c}').tz("{!opp.CalendarTimeZone__c}").format('YYYY-MM-DDTH:m:sZ')
+                },
+                end: {
+                    dateTime : moment('{!Opportunity.AppointmentDate__c}').tz("{!opp.CalendarTimeZone__c}").add(1, 'h').format('YYYY-MM-DDTH:m:sZ')
+                },
+                summary: '{!Opportunity.Clinic__r.ClinicCalendarKeyword__c}'
+            }
+            console.log('{!Opportunity.ClinicCalendarIdAuto__c}');
+             console.log('{!Opportunity.ClinicCalendarEventId__c}');
+            var request = gapi.client.calendar.events.update({
+                'calendarId': '{!Opportunity.ClinicCalendarIdAuto__c}',
+                'eventId': '{!Opportunity.ClinicCalendarEventId__c}',
+                'resource': selectedEvent
+            });
+        
+            request.execute(function(resp) {
+                console.log(resp);
+                if(!resp) {
+                    myJq('#processing-div').toggleClass('slds-hide');
+                    myJq('#failed-div').toggleClass('slds-hide');
+                } else {
+                    var record = new sforce.SObject("Opportunity"); 
+                    record.id = "{!Opportunity.Id}"; 
+                    record.StageName = "Lost";
+                    record.AppointmentCancelDate__c = new Date();
+                    //save the change 
+                    sforce.connection.update([record]); 
+                    //refresh the page 
+                    window.top.location = '/one/one.app?source=aloha#/sObject/{!Opportunity.Id}/view?t=';
+                }
+            });
+        }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=onLoadCallback">
+    </script>
+    
+  </head>
+  <body>
+    <div id="processing-div" class="medidate slds-page-header__detail-row slds-show">
+        <p>Cancelling appointment...</p>
+    </div>
+    <div id="failed-div" class="medidate slds-page-header__detail-row slds-hide">
+        <p>Appointment could not be cancelled due to an internal error. Please contact your administrator.</p>
+    </div>
+  </body>
+</html>
+</apex:page>

@@ -1,0 +1,204 @@
+<apex:component >
+    <style>
+        .medidate .message.errorM3 {
+            border: none!important;
+            background-color: transparent!important;
+        }
+        .medidate .message.errorM3 img{
+            display: none!important;
+        }
+        .medidate .message.errorM3 h4 {
+            color: #fff!important;
+        }
+        .medidate .message.errorM3 .messageText {
+            color: #fff!important;
+        }
+    </style>
+    <apex:attribute name="oppAccount" type="Account" description="the Account"/>
+    <apex:attribute name="opp" type="Opportunity" description="the Opp"/>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-grid">
+                <div class="medidate slds-form-element slds-size--1-of-5">
+                    <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.Salutation.Label}</label>
+                    <div class="medidate slds-form-element__control">
+                        <apex:inputField styleClass="medidate slds-select" value="{!oppAccount.Salutation}" required="true"/>
+                    </div>
+                </div>
+                <div class="medidate slds-form-element slds-size--4-of-5">
+                    <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.FirstName.Label}</label>
+                    <div class="medidate slds-form-element__control">
+                        <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.FirstName}" required="true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.BillingStreet.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-textarea slds-textarea--no-resize" value="{!oppAccount.BillingStreet}"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PatientContactAgree__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-select" value="{!oppAccount.PatientContactAgree__pc}" required="true"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.LastName.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.LastName}" required="true"/>
+                </div>
+           </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.BillingCity.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.BillingCity}"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PatientContactAgreeDetails__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:outputField styleClass="medidate slds-input" value="{!oppAccount.PatientContactAgreeDetails__pc}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.Phone.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.Phone}" required="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.BillingPostalCode.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.BillingPostalCode}"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PatientWaitingforClinic__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.PatientWaitingforClinic__pc}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PersonMobilePhone.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.PersonMobilePhone}"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.BillingCountry.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField value="{!oppAccount.BillingCountryCode}"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PatientWhatsappAgree__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <label class="medidate slds-checkbox">
+                        <apex:inputField value="{!oppAccount.PatientWhatsappAgree__pc}"/>
+                        <span class="slds-checkbox--faux"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PatientHealthInsurance__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-select" value="{!oppAccount.PatientHealthInsurance__pc}" required="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.BillingState.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField value="{!oppAccount.BillingStateCode}"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.Profession__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.Profession__pc}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PatientDateofBirth__pc.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.PatientDateofBirth__pc}" required="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Opportunity.fields.PaymentType__c.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!opp.PaymentType__c}" required="true"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded">
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+            <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Account.fields.PersonEmail.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!oppAccount.PersonEmail}" required="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+        <div class="medidate slds-form-element">
+                <label class="medidate slds-form-element__label">{!$ObjectType.Opportunity.fields.MedidateComments__c.Label}</label>
+                <div class="medidate slds-form-element__control">
+                    <apex:inputField styleClass="medidate slds-input" value="{!opp.MedidateComments__c}" />
+                </div>
+            </div>
+        </div>
+        <div class="medidate slds-col--padded slds-size--1-of-3">
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-grid--pull-padded slds-theme--error"></div>
+    <div class="medidate slds-grid slds-grid--pull-padded slds-theme--error">
+        <apex:pageMessages id="messages"/>
+    </div>
+</apex:component>

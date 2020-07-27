@@ -1,0 +1,14 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+
+{!opportunity.Account.EmailGreeting__c},
+
+wie besprochen habe ich Ihren Termin bei {!opportunity.ClinicProduct__r.ClinicOperationSurgeonName__c} am Calendar <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText>
+Time <apex:outputText value="{0,date,HH:mm}"> <apex:param value="{!opportunity.AppointmentDateCET__c}" /></apex:outputText> Uhr abgesagt.
+
+Selbstverständlich stehe ich Ihnen für Fragen jederzeit persönlich zur Verfügung. Antworten Sie einfach auf diese E-Mail oder rufen Sie uns an.
+
+Danke im Voraus,
+{!opportunity.AppointmentBookingAgentName__c}
+MediDate Ästhetik-Experte
+</apex:component>

@@ -1,0 +1,142 @@
+<aura:component controller="CalendarManagerCtrl" implements="force:appHostable" description="CalendarManager">
+
+    <!-- Attributes -->
+    <aura:attribute name="range" type="Object" access="private"/>
+    <aura:attribute name="clinicAppointmentRecoyrdTypes" type="List" access="private"/>
+    <aura:attribute name="events" type="List" access="private"/>
+    <aura:attribute name="resources" type="List" access="private"/>
+
+    <aura:attribute name="groupBy" type="String" access="private" default="Doctor"/>
+    <aura:attribute name="selectedDoctors" type="String" access="private"/>
+    <aura:attribute name="selectedLocations" type="String" access="private"/>
+    <aura:attribute name="selectedRecordTypes" type="String" access="private"/>
+    <aura:attribute name="asyncProcesses" type="Integer" default="0" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+
+    <aura:handler name="change" value="{!v.range}" action="{!c.handleGetActivities}"/>
+    <aura:handler name="change" value="{!v.groupBy}" action="{!c.handleGetActivities}"/>
+    <aura:handler name="change" value="{!v.selectedDoctors}" action="{!c.handleGetActivities}"/>
+    <aura:handler name="change" value="{!v.selectedLocations}" action="{!c.handleGetActivities}"/>
+    <aura:handler name="change" value="{!v.selectedRecordTypes}" action="{!c.handleGetActivities}"/>
+
+    <div class="cmp-content">
+        <article class="slds-card" style="height: 100%;">
+            <div style="height: 100%;">
+                <lightning:layout verticalAlign="start" multipleRows="true" class="cmp-body-grid">
+                    <lightning:layoutItem size="3"
+                                            largeDeviceSize="3"
+                                            mediumDeviceSize="3"
+                                            class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small cmp-body-grid-item">
+                        <div style="height: 100%; width: 100%; overflow-y: auto;">
+                            <lightning:layout verticalAlign="start" multipleRows="true">
+                                <lightning:layoutItem size="12"
+                                                        largeDeviceSize="12"
+                                                        mediumDeviceSize="12"
+                                                        class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small">
+                                    <lightning:input type="toggle"
+                                                        label="Group By"
+                                                        name="groupBy"
+                                                        checked="true"
+                                                        messageToggleActive="Doctor"
+                                                        messageToggleInactive="Location"
+                                                        onchange="{!c.handleToggleGroupBy}"/>
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem size="12"
+                                                        largeDeviceSize="12"
+                                                        mediumDeviceSize="12"
+                                                        class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small">
+                                    <c:strike_multiLookup aura:id="doctor-filter"
+                                                        filter="{!'RecordType.DeveloperName = \'ClinicsRecordType\''}"
+                                                        loadingMessage="Loading..."
+                                                        errorMessage="Invalid input"
+                                                        label="Doctor filter"
+                                                        iconName="standard:account"
+                                                        object="Account"
+                                                        searchField="Name"
+                                                        subtitleField=""
+                                                        required="false"
+                                                        disabled="false"
+                                                        value="{!v.selectedDoctors}"
+                                                        placeholder="Select an option"/>
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem size="12"
+                                                        largeDeviceSize="12"
+                                                        mediumDeviceSize="12"
+                                                        class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small">
+                                    <c:strike_multiLookup aura:id="location-filter"
+                                                            filter=""
+                                                            loadingMessage="Loading..."
+                                                            errorMessage="Invalid input"
+                                                            label="Location filter"
+                                                            iconName="standard:location"
+                                                            object="MD_Day_Location__c"
+                                                            searchField="Name"
+                                                            subtitleField=""
+                                                            required="false"
+                                                            disabled="false"
+                                                            value="{!v.selectedLocations}"
+                                                            placeholder="Select an option"/>
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem size="12"
+                                                        largeDeviceSize="12"
+                                                        mediumDeviceSize="12"
+                                                        class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small">
+                                    <c:strike_multiSelectPicklist label="Record type filter"
+                                                                errorMessage="Invalid input"
+                                                                value="{!v.selectedRecordTypes}"
+                                                                placeholder="Select an option">
+                                        <aura:iteration items="{!v.clinicAppointmentRecordTypes}" var="clinicAppointmentRecordType">
+                                            <c:strike_option label="{!clinicAppointmentRecordType.label}" value="{!clinicAppointmentRecordType.value}"/>
+                                        </aura:iteration>
+                                    </c:strike_multiSelectPicklist>
+                                </lightning:layoutItem>
+
+                                <lightning:layoutItem size="12"
+                                                        largeDeviceSize="12"
+                                                        mediumDeviceSize="12"
+                                                        class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small">
+                                    <p>Legend</p>
+                                    <div class="legend-blue">Available</div>
+                                    <div class="legend-red">Reserved</div>
+                                    <div class="legend-yellow">Paid</div>
+                                    <div class="legend-green"> Clinic Confirmed</div>
+                                    <div class="legend-purple">Cancelled by Clinic and Cancelled by MD</div>
+                                    <div class="legend-orange">Show Up</div>
+                                    <div class="legend-grey">No Show Up</div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </lightning:layoutItem>
+
+                    <lightning:layoutItem size="9"
+                                            largeDeviceSize="9"
+                                            mediumDeviceSize="9"
+                                            class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small cmp-body-grid-item">
+                        <c:Calendar aura:id="calendar"
+                                    events="{!v.events}"
+                                    resources="{!v.resources}"
+                                    showTooltip="true"
+                                    onDateRangeChange="{!c.handleDateRangeChange}"
+                                    onEventClick="{!c.handleActivityClick}"
+                                    onDayClick="{!c.handleDayClick}"
+                                    onLoading="{!c.handleOnLoading}"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+                <lightning:spinner variant="brand"
+                                    size="medium"
+                                    alternativeText="Loading..."
+                                    class="{!v.asyncProcesses == 0 ? 'slds-hidden' : ''}"/>
+            </div>
+        </article>
+    </div>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+</aura:component>

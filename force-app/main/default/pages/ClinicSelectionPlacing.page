@@ -1,0 +1,268 @@
+<apex:page controller="ClinicSelectionPlacing" showHeader="false" sidebar="false" docType="html-5.0" >
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head>
+        <title>Choose Clinic</title>
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS203, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css" />
+
+        <style type="text/css">
+            .slds .slds-hide{
+                display: none!Important;
+            }
+            .slds-no-background {
+                background: none;
+            }
+            .slds-textarea--no-resize {
+                resize: none!Important;
+                height: calc(1.875rem + (1px * 2));
+            }
+            .slds-white-space--normal {
+                white-space: normal;
+            }
+            select {
+                background-color: white;
+                color: #16325c;
+                border: 1px solid #d8dde6;
+                border-radius: 0.25rem;
+                width: 100%;
+                transition: border 0.1s linear, background-color 0.1s linear;
+                height: calc(1.875rem + (1px * 2));
+            }
+        </style>
+    </head>
+    <apex:form >
+        <body>
+        <!-- REQUIRED SLDS WRAPPER -->
+        <div class="medidate slds">
+            <div class="medidate slds-page-header" role="banner">
+                <div class="medidate slds-grid slds-page-header__detail-row">
+                    <article class="medidate slds-card slds-size--1-of-1">
+                        <header class="medidate slds-card__header slds-grid">
+                            <div class="medidate slds-tile slds-media">
+                                <div class="medidate slds-media__figure">
+                                    <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-map">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/action-sprite/svg/symbols.svg#map')}"></use>
+                                    </svg>
+                                </div>
+                                <div class="medidate slds-media__body">
+                                    <h3 class="medidate slds-truncate" ><a href="javascript:void(0);">Map</a></h3>
+                                    <div class="medidate slds-tile__detail slds-text-body--small">
+                                        <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                            <li class="medidate slds-item">{!$Label.CSNearbyClinics}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="medidate slds-card__body slds-text-align--center">
+                            <div id="googleMap" style="width:100%; height: 300px"></div>
+                        </div>
+                    </article>
+                </div>
+                <div class="medidate slds-grid slds-page-header__detail-row" id="clinics-overview">
+                    <article class="medidate slds-card slds-size--1-of-1">
+                        <header class="medidate slds-card__header slds-grid">
+                            <div class="medidate slds-tile slds-media">
+                                <div class="medidate slds-media__figure">
+                                    <svg aria-hidden="true" class="medidate slds-icon slds-icon-action-more">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS203, 'assets/icons/action-sprite/svg/symbols.svg#more')}"></use>
+                                    </svg>
+                                </div>
+                                <div class="medidate slds-media__body">
+                                    <h3 class="medidate slds-truncate" ><a href="javascript:void(0);">{!$Label.CSClinics}</a></h3>
+                                    <div class="medidate slds-tile__detail slds-text-body--small">
+                                        <ul class="medidate slds-list--horizontal slds-has-dividers--right">
+                                            <li class="medidate slds-item">{!$Label.CSPleaseSelectClinicToSeeCalendar}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="medidate slds-card__body slds-text-align--center">
+                            <apex:outputPanel id="rerenderTable">
+                            <table class="medidate slds-table slds-table--bordered slds-table--cell-buffer" role="grid">
+                                <thead>
+                                <tr class="medidate slds-text-heading--label">
+                                    <th class="medidate slds-text-heading--label" scope="col" style="width:35px;white-space: normal;">
+                                        &nbsp;
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$ObjectType.MD_Day_Location__c.Label}
+                                            <apex:param value="mDDayLocationName" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$Label.Doctor}
+                                            <apex:param value="doctorName" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="width:120px;white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$ObjectType.Account.fields.Priority__c.Label}
+                                            <apex:param value="priority" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$ObjectType.Account.fields.OP_Standorte__c.Label}
+                                            <apex:param value="oPLocations" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$Label.Distance}
+                                            <apex:param value="distance" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$Label.Price}
+                                            <apex:param value="price" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">{!$ObjectType.Product2.Label}
+                                            <apex:param value="productName" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                    <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">MD Day Date
+                                            <apex:param value="Date" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+                                    </th>
+                                   <th class="medidate slds-text-heading--label" scope="col" style="white-space: normal;">
+                                        <apex:commandLink oncomplete="allinit()" rerender="rerenderTable,theRepeat">Available Appointments
+                                            <apex:param value="availableAppointments" name="column" assignTo="{!sortKey}"/>
+                                        </apex:commandLink>
+
+                                    </th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <apex:repeat value="{!selectedClinics}" var="selectedClinic">
+                                    <tr class="medidate slds-hint-parent">
+                                        <td class="medidate" style="white-space: normal;">
+                                            <input type="radio" name="clinicProd" value="{!selectedClinic.mDDayLocationId + ';' + selectedClinic.doctorId + ';' + selectedClinic.clinicProductRecId}"/>
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                            <a href="/{!selectedClinic.mDDayLocationId}" target="_blank">{!selectedClinic.mDDayLocationName}</a>
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                            <a href="/{!selectedClinic.doctorId}" target="_blank">{!selectedClinic.doctorName}</a>
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                                {!selectedClinic.priority}
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                                {!selectedClinic.oPLocations}
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                                {!selectedClinic.distance} km
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                                {!selectedClinic.price}
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                            <a href="/{!selectedClinic.clinicProductRecId}" target="_blank">{!selectedClinic.clinicProductName}</a>
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                           {!selectedClinic.mdDate}
+                                        </td>
+                                        <td class="medidate" style="white-space: normal;">
+                                            {!selectedClinic.availableAppointments}
+                                        </td> 
+                                    </tr>
+                                </apex:repeat>
+                                </tbody>
+                            </table>
+                            </apex:outputPanel>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+
+            var chosenRadiValue = null;
+
+            function initialize() {
+                var myOptions = { mapTypeId: google.maps.MapTypeId.ROADMAP};
+                var map = new google.maps.Map(document.getElementById("googleMap"), myOptions);
+                var bounds = new google.maps.LatLngBounds();
+
+                if('{!obj.latitude}' != '') {
+                    addPin(map, bounds, '{!obj.latitude}', '{!obj.longitude}', "{!obj.name}", "{!URLFOR($Resource.GoogleMapsMarkers, 'blue_MarkerP.png')}");
+                }
+                var myJq = jQuery.noConflict();
+
+            <apex:repeat value="{!selectedClinics}" var="selectedClinic" id="theRepeat">
+                        addPin(map, bounds, '{!selectedClinic.latitude}', '{!selectedClinic.longitude}', "{!selectedClinic.mDDayLocationName}", "{!URLFOR($Resource.GoogleMapsMarkers, 'red_MarkerK.png')}");
+                if('{!obj.latitude}' != '') {
+                    var service = new google.maps.DistanceMatrixService;
+                    service.getDistanceMatrix({
+                        origins: [{lat: parseFloat('{!obj.latitude}'), lng: parseFloat('{!obj.longitude}')}],
+                        destinations: [{lat: parseFloat('{!selectedClinic.latitude}'), lng: parseFloat('{!selectedClinic.longitude}')}],
+                        travelMode: 'DRIVING',
+                        unitSystem: google.maps.UnitSystem.METRIC,
+                        avoidHighways: false,
+                        avoidTolls: false
+                    }, function(response, status) {
+                        if (status == 'OK') {
+                            myJq(".distance-{!selectedClinic.mDDayLocationId}").html(response.rows[0].elements[0].distance.text);
+                        }
+                    });
+                }
+            </apex:repeat>
+
+                map.fitBounds(bounds);
+            }
+
+            function addPin(map, bounds, latitude, longitude, title, image) {
+                var infowindow = new google.maps.InfoWindow({content: title});
+                var myLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: title,
+                    icon: image
+                });
+                marker.addListener('click', function() {infowindow.open(map, marker);});
+                bounds.extend(marker.getPosition());
+            }
+
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjDNte86epLdl3JsiCStRLIjq1UwU10nw&signed_in=true&callback=initialize"></script>
+        <script src="https://apis.google.com/js/client.js?onload=onLoadCallback" async="defer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+        <script type="text/javascript">
+            function wrapper(){
+                var myJq = jQuery.noConflict();
+
+                myJq(document).ready(function() {
+                    myJq('html, body').animate({
+                        scrollTop: myJq("#clinics-overview").offset().top
+                    }, 500);
+                    myJq('input[type=radio][name=clinicProd]').change(function() {
+                        parent.postMessage(myJq(this).attr('value'), "{!baseUrl}");
+                        chosenRadiValue = myJq(this).attr('value');
+                        console.log(myJq(this).attr('value'));
+                    });
+                    myJq('.dateFormat').remove();
+                });
+            };
+            wrapper();
+            function allinit () {
+                initialize();
+                wrapper();
+                if (chosenRadiValue != null){
+                    var myJq = jQuery.noConflict();
+                    myJq('input[type=radio][name=clinicProd][value="'+chosenRadiValue+'"]')[0].checked = true;
+                }
+            }
+
+        </script>
+
+        </body>
+    </apex:form>
+
+</html>
+</apex:page>

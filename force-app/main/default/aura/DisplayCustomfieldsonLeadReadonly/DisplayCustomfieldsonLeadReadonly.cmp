@@ -1,0 +1,32 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!-- 
+        Using lightning:recordViewForm tag record Id and objectApiName is required to fetch record.
+        For custom objects, do check you have __c in the api name
+     -->
+        <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Lead">
+        <!-- Using lightning:card tag with a title -->
+        <lightning:card title="Wichtige Information">
+            <!-- lightning:card body section starts -->
+            <p class="slds-p-horizontal_small">
+                <!-- Forming a grid of two equal columns -->
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-2">
+                        <!-- 
+                            Using lightning:outputField Tag with fieldName = Api name of field,
+                            if you are using a custom field, do check you have __c in the api name
+                         -->
+                        <lightning:outputField fieldName="Q2_00__c" />    
+                        <lightning:outputField fieldName="Q4_00__c" />    
+                        <lightning:outputField fieldName="Q12_06__c"/> 
+                        <lightning:outputField fieldName="Q6_00__c"/>   
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:outputField fieldName="Q1_00__c"/>    
+                        <lightning:outputField fieldName="Q3_00__c"/>    
+                        <lightning:outputField fieldName="Q5_00__c"/>    
+                    </div>
+                </div>
+            </p>
+        </lightning:card>        
+    </lightning:recordViewForm>
+</aura:component>

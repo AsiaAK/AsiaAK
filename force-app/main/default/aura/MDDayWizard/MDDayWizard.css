@@ -1,0 +1,42 @@
+.THIS.mddw-app {
+	min-width: 300px;
+    min-height: 400px;
+    background: rgb(244, 246, 249);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateZ(0);
+}
+
+.THIS.mddw-app
+.section {
+	position: relative;
+}
+
+.THIS.mddw-app
+.section:first-child {
+	height: calc(100% - (56px));
+	position: relative;
+}
+
+.THIS.mddw-app
+.section:last-child {
+	height: 56px;
+}
+
+.THIS.mddw-app
+.section
+.section-item-main {
+	height: 100%;
+	overflow: hidden;
+    background-color: white;
+}
+
+@media (max-width: 479px) {
+    .THIS.mddw-app
+    .section:first-child {
+        height: calc(100% - (56px));
+    }
+}

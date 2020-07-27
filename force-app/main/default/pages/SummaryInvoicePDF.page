@@ -1,0 +1,31 @@
+<apex:page extensions="SummaryController" showHeader="false" renderAs="pdf" applyBodyTag="false" applyHtmlTag="false" recordSetVar="Payment__c" standardController="Payment__c">
+    <html>
+        <head>
+            <style>
+                @page {
+                  size: A4;
+                  margin : 0;
+                 
+                }
+                div.footer {
+                    font-size:80%;
+                }  
+                @media print {
+                  html, body {
+                    width: 210mm;
+                    height: 297mm;
+                    margin: 0;
+                  }
+                  /* ... the rest of the rules ... */
+                }
+                body{margin:0; padding:0}
+                <!--.invoiceDiv{page-break-after: always;}-->
+             </style>
+        </head>
+        <body>
+            <apex:repeat value="{!wraplist}" var="payment">
+                <c:SummaryReceipt payment="{!payment}" />
+            </apex:repeat>
+        </body>
+    </html>
+</apex:page>

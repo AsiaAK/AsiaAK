@@ -1,0 +1,29 @@
+.THIS {
+}
+
+.THIS.record-form-scroll {
+	height: calc(100% - 1.5rem);
+	background-color: white;
+	overflow-x: hidden;
+}
+
+.THIS.record-form-scroll > *:not(.pageLevelErrors.forceRecordEdit){
+	min-height: 100%;
+}
+
+.THIS .slds-form-element {
+    width: 100%;
+}
+
+.THIS [role=combobox] input[readonly] {
+    border-color: transparent;
+}
+
+.THIS [role=combobox] input[readonly]:focus,
+.THIS [role=combobox] input[readonly].slds-has-focus {
+    box-shadow: 0 0 transparent;
+}
+
+.THIS .slds-input[readonly] {
+    box-shadow: 0 0 transparent;
+}

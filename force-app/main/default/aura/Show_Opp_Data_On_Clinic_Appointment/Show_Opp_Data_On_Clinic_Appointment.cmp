@@ -1,0 +1,31 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!-- 
+        Using lightning:recordViewForm tag record Id and objectApiName is required to fetch record.
+        For custom objects, do check you have __c in the api name
+     -->
+        <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Clinic_appointment__c">
+        <!-- Using lightning:card tag with a title -->
+        <lightning:card title="Due dates (Opportunity)">
+            <!-- lightning:card body section starts -->
+            <p class="slds-p-horizontal_small">
+                <!-- Forming a grid of two equal columns -->
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-2">
+                        <!-- 
+                            Using lightning:outputField Tag with fieldName = Api name of field,
+                            if you are using a custom field, do check you have __c in the api name
+                         -->
+                        <lightning:outputField fieldName="KVA_sent_date__c" />    
+                        <lightning:outputField fieldName="Due_Date_anzahlungs_new_KVA__c" />    
+                        <lightning:outputField fieldName="Due_date_Rechnung_new_KVA__c"/>   
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:outputField fieldName="Surgery_Invoice_Shipping_Date__c"/>    
+                        <lightning:outputField fieldName="Surgery_Invoice_Downpayment_Due_Date__c"/>    
+                        <lightning:outputField fieldName="Surgery_Invoice_Due_Date__c"/>    
+                    </div>
+                </div>
+            </p>
+        </lightning:card>        
+    </lightning:recordViewForm>
+</aura:component>

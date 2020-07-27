@@ -1,0 +1,230 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+    
+      <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+          <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:300"/>
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <title>Medidate: Spitzenmedizin zu attraktiven Preisen
+          </title>
+          <style type="text/css">
+            @import url("http://fonts.googleapis.com/css?family=Roboto:300");
+            /* Client-specific Styles */
+            #outlook a {
+              padding:0;
+            }
+            /* Force Outlook to provide a "view in browser" menu link. */
+            body{
+              font-family: 'Roboto', serif;
+              width:100% !important;
+              -webkit-text-size-adjust:100%;
+              -ms-text-size-adjust:100%;
+              margin:0;
+              padding:0;
+            }
+            /* Prevent Webkit and Windows Mobile platforms from changing default font sizes, while not breaking desktop design. */
+            .ExternalClass {
+              width:100%;
+            }
+            /* Force Hotmail to display emails at full width */
+            .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+              line-height: 100%;
+            }
+            /* Force Hotmail to display normal line spacing.*/
+            #backgroundTable {
+              margin:0;
+              padding:0;
+              width:100% !important;
+              line-height: 100% !important;
+            }
+            img {
+              outline:none;
+              text-decoration:none;
+              border:none;
+              -ms-interpolation-mode: bicubic;
+            }
+            a img {
+              border:none;
+            }
+            .image_fix {
+              display:block;
+            }
+            p {
+              margin: 0px 0px !important;
+            }
+            table td {
+              border-collapse: collapse;
+            }
+            table {
+              border-collapse:collapse;
+              mso-table-lspace:0pt;
+              mso-table-rspace:0pt;
+            }
+            a {
+              color: #0a8cce;
+              text-decoration: none;
+              text-decoration:none!important;
+            }
+            ul {
+          padding: 0px;
+          }
+          li {
+          list-style: none;
+          position: relative;
+          padding-left: 15px;
+          line-height: 20px;
+          }
+          li:before {
+          content: "";
+          width: 7px;
+          height: 7px;
+          position: absolute;
+          background-color: #1f636a;
+          left: 0;
+          top: 7px;
+          border-radius: 7px;
+        
+            }
+            /*STYLES*/
+            table[class=full] {
+              width: 100%;
+              clear: both;
+            }
+            /* This sets elements to 100% width and fixes the height issues too, a god send */
+            *[class="100p"] {
+              width:100% !important;
+              height:auto !important;
+            }
+            *[class="devicewidthinner2"] {
+              border-radius: 0.5em;
+              border:1px solid #DCDCDC!important;
+              border-spacing: 10px;
+              border-collapse: separate;
+            }
+            /*IPAD STYLES*/
+            @media only screen and (max-width: 640px) {
+              a[href^="tel"], a[href^="sms"] {
+                text-decoration: none;
+                color: #0a8cce;
+                /* or whatever your want */
+                cursor: default;
+              }
+              .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                text-decoration: default;
+                color: #0a8cce !important;
+                pointer-events: auto;
+                cursor: default;
+            }
+            /*IPHONE STYLES*/
+            @media only screen and (max-width: 480px) {
+              a[href^="tel"], a[href^="sms"] {
+                text-decoration: none;
+                color: #0a8cce;
+                /* or whatever your want */
+                cursor: default;
+              }
+              .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                text-decoration: default;
+                color: #0a8cce !important;
+                pointer-events: auto;
+                cursor: default;
+              }
+              table[class=devicewidth] {
+                width: 320px!important;
+                text-align:left!important;
+              }
+              table[class=devicewidthinner] {
+                width: 300px!important;
+                text-align:left!important;
+              }
+              table[class=devicewidthinner2] {
+                border-radius: 0.5em!important;
+                border:1px solid #DCDCDC!important;
+                width: 300px!important;
+                text-align:left!important;
+                font-size: 13px!important;
+              }
+              table[class=devicewidthinner3] {
+                width: 300px!important;
+                text-align:center!important;
+              }
+              img[class=banner] {
+                width: 320px!important;
+                height:41px!important;
+              }
+              img[class=banner2] {
+                width: 300px!important;
+                height:270px!important;
+              }
+              img[class=logos] {
+                width: 250px!important;
+                height:35px!important;
+              }
+              img[class=shadow] {
+                width: 320px!important;
+                height:6px!important;
+              }
+              img[class=wallet] {
+                width: 320px!important;
+                height:40px!important;
+              }
+              img[class=colimg2] {
+                width: 320px!important;
+                height:140px!important;
+              }
+              img[class=separator] {
+                width: 320px!important;
+                height:19px!important;
+              }
+              img[class=icon] {
+                width: 25px!important;
+              }
+              td[class=mobile-hide]{
+                display:none!important;
+              }
+              td[class="padding-bottom25"]{
+                padding-bottom:25px!important;
+              }
+            }
+            /*--- Preheader declaration in style block in addition to inline for Outlook */
+            .preheader {
+              display:none !important;
+              visibility:hidden;
+              opacity:0;
+              color:transparent;
+              height:0;
+              width:0;
+            }
+          </style>
+        </head>
+        <table style="padding: 10px 5px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr>
+                <td class="bodycopy innerpadding-all" style="color: #333333; font-family: Verdana, arial, sans-serif; line-height: 25px; font-size: 14px; padding: 15px;"><br />
+                  {!opportunity.Account.EmailGreeting__c},<br /><br />
+                  ich habe von {!opportunity.ClinicProduct__r.ClinicOperationSurgeonName__c} die Rückmeldung bekommen, dass Sie bei dem Termin am&nbsp; <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText> um&nbsp;<apex:outputField value="{!opportunity.EmailAppointmentTime__c}" /> Uhr waren.
+                  <br></br><br></br>
+                  Gerne würde ich wissen, wie Sie den Termin fanden und was die nächsten Schritte sind.
+                  <br></br><br></br>
+                  Schreibe Sie mir bitte doch kurz, wann ich Sie am besten für ein kurzes Telefonat erreichen könnte.
+                  <br></br><br></br>
+                  Beste Grüße<br /><br />{!opportunity.AppointmentBookingAgentName__c}<br /> MediDate Ästhetik-Experte
+                </td>
+            </tr>
+          </tbody>
+        </table>
+        <td class="innerpadding footer" style="padding: 0 15px 0; font-family: Verdana, arial, sans-serif; line-height: 25px; font-size: 12px;" bgcolor="#FFFFFF"><a style="text-decoration: none; color: #999999;" href="tel:+493022011993">  <!-- <img src="{!Lead.EmailCallAgentImageURL__c}" alt="agent_picture" border="0" width="100" style="display:block; border:none; outline:none; text-decoration:none;"/> --> </a>
+        </td >
+            <table border="0" width="100%" cellspacing="0" cellpadding="0">
+              <tbody>
+                    <tr>
+                        <td style="padding: 15px; color: #1f636a; font-family: Verdana, arial, sans-serif; line-height: 24px; font-size: 12px;" align="left"><br />eHealth MediDate GmbH <br />Torstr. 35 – 10119 Berlin<br /> <a style="text-decoration: none; color: #1f636a;" href="tel:+493022011993">030 / 220 119 93</a><br /> <a style="color: #1f636a; text-decoration: none;" href="mailto:kundenbetreuung@medidate.de">kundenbetreuung@medidate.de </a> </td>  <br /><br />
+                    </tr>
+                        <tr>
+                            <img style="padding: 15px; height: auto;" src="https://medi-date.appspot.com/mail/logo-ehealth-medidate-gmbh.png" alt="eHealth MediDate GmbH Logo" width="172" height="24" border="0"></img>
+                        </tr>
+              </tbody>
+            </table>
+           </html>
+</apex:component>

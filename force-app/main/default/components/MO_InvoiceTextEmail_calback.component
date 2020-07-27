@@ -1,0 +1,89 @@
+<apex:component access="global" controller="InvoiceController">
+<apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+Bitte bestätigen Sie Ihren Termin innerhalb der nächsten 3 Tage
+
+Fragen Sie unsere Experten
+01714932760
+Mo-Fr 8:30 bis 20:30 Uhr / Sa 10 bis 18 Uhr 
+
+Diesen Termin müssen Sie innerhalb der nächsten 24 Stunden mit der Zahlung der {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} bestätigen.
+
+Die Gebühr ist schon vor der privatärztlichen Leistung zu zahlen, da wir Ihnen nur so garantieren können, dass der Termin bestehen bleiben kann.
+
+Datum: <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText> 
+Zeit: {!opportunity.EmailAppointmentTime__c} Uhr
+
+Ihr Arzt {!opportunity.ClinicProduct__r.ClinicOperationSurgeonName__c} 
+Ihr Voruntersuchungs-Ort: {!opportunity.Pre_Ex_Location__c}, {!opportunity.Pre_Ex_location_address__c}
+
+WICHTIG:
+Dieser privatärztliche Termin wird, wie bei anderen Fachärzten Landesweit auch, nach der Gebührenverordnung für Ärzte mit {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} abgerechnet.
+
+Wie bestätige ich meinen Wunschtermin?
+Um Ihren Wunschtermin zum attraktiven Medical One-Preis zu bestätigen, ist die Zahlung der Voruntersuchungsgebühr in Höhe von {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} bis zum <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!payment.PaymentDueDate__c}" /></apex:outputText> notwendig. Diese können Sie per Banküberweisung, Kreditkarte, PayPal oder Sofortüberweisung bezahlen.
+Jetzt bezahlen
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.PaymentType__c == 'Pre-Payment')}">
+Bankverbindung:
+eHealth MediDate GmbHD
+E18 1005 0000 0190 4913 37
+BELADEBEXXX
+Berliner Sparkasse
+
+
+</apex:panelGroup>
+
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c != 'Voruntersuchung' && opportunity.DateNoContact__c != null)}">
+Wichtige Hinweise
+Tragen Sie ab dem Beginn der Karenzzeit am&nbsp;<apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.DateNoContact__c}" /></apex:outputText> keine Kontaktlinsen mehr.
+</apex:panelGroup>
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.DateNoContact__c != null)}">
+Wichtige Hinweise
+Tragen Sie ab dem Beginn der Karenzzeit am&nbsp;<apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.DateNoContact__c}" /></apex:outputText> keine Kontaktlinsen mehr.
+Beachten Sie, dass Sie nach der Voruntersuchung nicht mit dem Auto fahren dürfen.  
+</apex:panelGroup>
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.DateNoContact__c == null)}">
+Wichtige Hinweise
+Beachten Sie, dass Sie nach der Voruntersuchung nicht mit dem Auto fahren dürfen.
+</apex:panelGroup>
+
+Bei Bestätigung Ihres Termins, erhalten Sie einige Tage vor Ihrer Untersuchung einen Anruf Ihres Kundenberaters, bei dem Sie letzte Fragen klären können.
+
+Sie erhalten folgende exklusive Medical One-Vorteile:
+
+Höchste medizinische Qualität! Für Ihr Wunschergebnis arbeiten wir ausschließlich mit den führenden Fachärzten für Plastisch-Ästhetische Chirurgie zusammen
+
+Ausgezeichnete Patientenzufriedenheit! Bereits mehr als 25.000 zufriedene Patienten haben wir erfolgreich begleitet
+
+Attraktive Vorteilspreise! Sparen Sie bei Ihrer Premiumbehandlung
+
+Wir sind für Sie da! Medical One bietet Ihnen eine umfassende Beratung und Betreuung, sowie eine Folgekostenversicherung und eine attraktive Finanzierungsmöglichkeit
+
+Warum Medical One:
+
+Wir arbeiten deutschlandweit mit führenden Fachärzten der plastisch / ästhetischen Chirurgie zusammen.
+
+Sie erhalten höchste Qualität zu einem fairen Preis - Leistungsverhältnis.
+
+Sie bekommen eine Rundumbetreuung - wir begleiten Sie vom ersten Beratungstermin bis hin zur Nachsorge und stehen Ihnen bei allen Fragen jederzeit zur Seite.
+
+Sie haben bei uns attraktive Finanzierungsmöglichkeiten und einen festen Ansprechpartner, der diese mit Ihnen bespricht.
+
+Durch eine Folgekostenversicherung erhalten Sie eine umfassende Sicherheit während und nach der Operation.
+
+Mit freundlichen Grüßen
+{!opportunity.Owner.Name}
+Medical One-Patientenbetreuung
+
+Tel.: 01714932760
+email: info@medical-one.de
+
+www.medical-one.de
+MEDICAL ONE GmbH | Ottostraße 17 | 180333 München<br />
+Geschäftsführer: Eiko Gerten, Nico Kutschenko, Sebastian Vohradnik, Heidi Niemöller
+Amtsgericht München - HRB 233473
+
+</apex:component>

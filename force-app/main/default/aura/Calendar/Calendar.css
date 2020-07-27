@@ -1,0 +1,13 @@
+.THIS {
+    
+}
+
+.THIS.body-container {
+	height: 100%;
+}
+
+.THIS.body-container
+.calendar-container {
+    height: 100%;
+    overflow-y: auto;
+}

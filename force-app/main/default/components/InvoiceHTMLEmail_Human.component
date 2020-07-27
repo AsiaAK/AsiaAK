@@ -1,0 +1,188 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:300"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <title>Zahlungsbestätigung</title>
+        <style type="text/css">
+            @import url("http://fonts.googleapis.com/css?family=Roboto:300");
+
+            #outlook a {
+                padding: 0
+            }
+
+            body {
+                font-family: 'Roboto', serif;
+                width: 100% !important;
+                -webkit-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+                margin: 0;;
+                padding: 0
+            }
+
+            .ExternalClass {
+                width: 100%
+            }
+
+            .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+                line-height: 100%
+            }
+
+            img {
+                outline: 0;
+                text-decoration: none;
+                border: 0;
+                -ms-interpolation-mode: bicubic
+            }
+
+            a img {
+                border: 0
+            }
+
+            p {
+                margin: 0 0 !important
+            }
+
+            table td {
+                border-collapse: collapse
+            }
+
+            table {
+                border-collapse: collapse;
+                mso-table-lspace: 0;
+                mso-table-rspace: 0
+            }
+
+            a {
+                color: #0a8cce;
+                text-decoration: none;
+                text-decoration: none !important
+            }
+
+            @media only screen and (max-width: 640px) {
+                a[href^="tel"], a[href^="sms"] {
+                    text-decoration: none;
+                    color: #0a8cce;
+                    cursor: default
+                }
+
+                .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                    text-decoration: initial;
+                    color: #0a8cce !important;
+                    pointer-events: auto;
+                    cursor: default
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <table style="margin : 0; padding: 0; width: 100% !important; line-height: 25px; !important; font-family: 'Roboto', Verdana, arial, sans-serif; font-size: 16px; max-width: 1000px;"
+           border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <td style="padding: 15px 10px;">
+                <img src="https://cdn.medidate.com/img/MedidateLogoNew.png" alt="eHealth Medidate GmbH" width="200px"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 15px 10px;">
+                <!-- Email body content -->
+                {!opportunity.Account.EmailGreeting__c},<br/>
+                <br/>
+                wir gratulieren Ihnen, den ersten Schritt in ein neues Lebensgefühl gewagt zu haben. Zudem bedanken wir und die <span
+                    style="font-weight:bold;">{!opportunity.Clinic__r.Name}</span> uns für Ihr Vertrauen.<br/>
+                <br/>
+                <b>
+                    <apex:outputText value="{0,date,dd.MM.YYYY}">
+                        <apex:param value=""/>
+                    </apex:outputText>
+
+                    <apex:outputText value="{0,date,dd.MM.YYYY}">
+                        <apex:param value="{!payment.PaymentDate__c}"/>
+                        <br/>
+                    </apex:outputText>
+                </b>
+                <br/>
+                <div class="imgpop" style="width:100%;">
+                    <a href="{!SUBSTITUTE(HTMLENCODE(payment.LegacyPaymentLink__c),'amp;amp;','')}" name="generic_btn1" style="display:block; text-decoration: none; color: #ffffff; font-weight: bold; line-height: 30px; font-size:14px; background-color:#1f636a; width: 400px; margin:10px 0;text-align:center;" target="_blank">Jetzt bezahlen</a>
+                    <a target="_blank" href="{!SUBSTITUTE(HTMLENCODE(payment.LegacyPaymentLink__c),'amp;amp;','')}"><img width="332" border="0" alt="Logos" style="display:block; outline:none; text-decoration:none;margin:20px 0;" src="https://medi-date.appspot.com/mail/Logos.png"
+                                                                                                                         class="logos"/></a>
+                    <small>Nicht bezahlte Termine müssen von uns für andere Patienten freigegeben werden.</small>
+                </div>
+                <apex:panelGroup layout="none" rendered="{!(opportunity.PaymentType__c == 'Pre-Payment')}">
+                    <br/>
+                    Bankverbindung:<br/>
+                    eHealth MediDate GmbH<br/>
+                    DE18 1005 0000 0190 4913 37<br/>
+                    BELADEBEXXX<br/>
+                    Berliner Sparkasse<br/>
+                    <br/>
+                    Bitte geben Sie bei der Überweisung folgenden Verwendungszweck an: {!payment.Customer_Bank_Transfer_ID__c}.<br/>
+                </apex:panelGroup>
+                <br/>
+                <br/>
+                <b>Warum muss ich meinen Wunschtermin bestätigen?</b><br/>
+                Wir haben sehr viele Anfragen für unsere Termine und müssen darum sicherstellen, dass Sie Ihren Termin wirklich wahrnehmen wollen. Deshalb möchten wir Sie bitten die Voruntersuchungsgebühr in Höhe von <b>{!payment.PaymentAmount__c} {!payment.CurrencyIsoCode}</b> bis zum <b>
+                <apex:outputText value="{0,date,dd.MM.YYYY}">
+                    <apex:param value="{!payment.PaymentDueDate__c}"/>
+                </apex:outputText>
+            </b> zu bezahlen. Diese können Sie per Banküberweisung, Kreditkarte, PayPal oder Sofortüberweisung bezahlen.<br/>
+                <br/>
+
+
+                <apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c != 'Voruntersuchung' && opportunity.DateNoContact__c != null)}">
+                    <b>Wichtige Hinweise</b><br/>
+                    Tragen Sie ab dem Beginn der Karenzzeit am&nbsp;<apex:outputText value="{0,date,dd.MM.YYYY}">
+                    <apex:param value="{!opportunity.DateNoContact__c}"/>
+                </apex:outputText>
+                    keine Kontaktlinsen mehr.<br/>
+                </apex:panelGroup>
+
+                <apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.DateNoContact__c != null)}">
+                    <b>Wichtige Hinweise</b><br/>
+                    Tragen Sie ab dem Beginn der Karenzzeit am&nbsp;<apex:outputText value="{0,date,dd.MM.YYYY}">
+                    <apex:param value="{!opportunity.DateNoContact__c}"/>
+                </apex:outputText>
+                    keine Kontaktlinsen mehr.<br/>
+                    <br/>
+                    Beachten Sie, dass Sie nach der Voruntersuchung nicht mit dem Auto fahren dürfen.<br/>
+                </apex:panelGroup>
+
+                <apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.DateNoContact__c == null && opportunity.RecordType.DeveloperName == 'Lasik')}">
+                    <b>Wichtige Hinweise</b><br/>
+                    Beachten Sie, dass Sie nach der Voruntersuchung nicht mit dem Auto fahren dürfen.<br/>
+                </apex:panelGroup>
+                <br/>
+                <br/>
+                Wir freuen uns darauf von Ihnen zu hören<br/>
+                <br/>
+                Mit freundlichen Grüßen<br/>
+                <br/>
+                {!opportunity.Owner.Name}<br/>
+                MediDate-Patientenbetreuung
+                <!-- /Email body content -->
+            </td>
+        </tr>
+        <tr>
+            <td style="color: #1f636a; padding: 15px 10px;">
+                eHealth MediDate GmbH<br/>
+                Torstr. 35 – 10119 Berlin<br/>
+                <a style="text-decoration: none; color: #1f636a;" href="tel:+493030809549">
+                    030 / 308 095 49
+                </a><br/>
+                <a style="color: #1f636a; text-decoration: none;" href="mailto:kundenbetreuung@medidate.de">
+                    kundenbetreuung@medidate.de
+                </a>
+                <br/>
+                <br/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </body>
+    </html>
+</apex:component>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Private</cacheControl>
+    <contentType>application/javascript</contentType>
+    <description>Extracting list of all the objects (Standard + Custom) in Salesforce - ‘Why not list out all the objects(which is quite simple) and their related objects(this was challenging) as well in a VF page’?</description>
+</StaticResource>

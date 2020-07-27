@@ -1,0 +1,46 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global" >
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="simpleRecord" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+    <aura:attribute access="private" name="showSpinner" type="Boolean" default="false" />
+    <aura:handler name="endUpdateEvent" event="c:EndUpdateEvent" action="{!c.endEvent}"/>
+    
+    <force:recordData aura:id="recordLoader"
+      recordId="{!v.recordId}"
+      layoutType="FULL"
+      targetRecord="{!v.record}"
+      targetFields="{!v.simpleRecord}"
+      targetError="{!v.recordError}" />
+
+    <lightning:spinner class="{!v.showSpinner ? '' : 'slds-hide'}" alternativeText="Loading..."/>
+	<div class="medidate slds">   
+    	<div class="medidate slds-page-header" role="banner">
+        	<div class="medidate slds-grid">
+            	<div class="medidate slds-col slds-has-flexi-truncate">
+                	<div class="medidate slds-media">
+                    	<div class="medidate slds-media__figure">
+							<lightning:icon iconName="custom:custom94" size="large" />
+                        </div>
+                        <div class="medidate slds-media__body">
+                        	<p class="medidate slds-text-heading--label">{!$Label.c.CSChooseClinic}</p>
+
+                            <h1 class="medidate slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!v.simpleRecord.Name}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="medidate slds-grid slds-page-header__detail-row">
+    	<c:ClinicSelectionPlacing recordId="{!v.recordId}" sObjectName="{!v.sobjecttype}"/>
+    </div>
+    <div class="medidate slds-grid slds-page-header__detail-row">
+    	<c:ClinicSelectionCalendar aura:id="events" recordId="{!v.recordId}"/>
+    </div>
+    	<c:ClinicSelectionInformation aura:id="details" recordId="{!v.recordId}"/>
+      
+    <div class="medidate slds-grid slds-page-header__detail-row">
+    	<lightning:button variant="brand" label="Reservieren" onclick="{!c.doReserve}" />
+    </div>
+</aura:component>

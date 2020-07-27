@@ -1,0 +1,16 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+
+{!opportunity.Account.EmailGreeting__c},
+
+gerade habe ich die Terminbestätigung von MediDate erhalten und freue mich, Sie am Calendar <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText> 
+Time <apex:outputText value="{0,date,HH:mm}"> <apex:param value="{!opportunity.AppointmentDateCET__c}" /></apex:outputText> Uhr persönlich kennenzulernen.
+
+Sollten Sie bis dahin noch Fragen haben, können Sie sich gerne jederzeit an MediDate unter der Telefonnummer 030 220 119 93 wenden.
+
+Mit besten Grüßen
+
+{!opportunity.ClinicProduct__r.ClinicOperationSurgeonName__c}
+
+Von meinem iPhone gesendet
+</apex:component>

@@ -1,0 +1,49 @@
+<aura:component implements="force:hasRecordId"  controller="AnyEventCalCtrl2">
+    <!-- HARDCODE vfHost -->
+    <aura:attribute name="vfHost" type="String" default="{!$Label.c.Map_Iframe_Url}"/>
+
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <ltng:require scripts="{!join(',', $Resource.AnyEventCal + '/moment.min.js', $Resource.AnyEventCal + '/moment-timezone.min.js', $Resource.AnyEventCal + '/jquery.min.js', $Resource.AnyEventCal + '/fullcalendar.min.js')}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" />
+    <aura:attribute name="sObjectLabel" type="String" default="Clinic Appointment"/>
+    <aura:attribute name="sObjectName" type="String" default="Clinic_Appointment__c"/>
+    <aura:attribute name="titleField" type="String" default="CS_Title__c"/>
+    <aura:attribute name="startDateTimeField" type="String" default="CS_Start_Date__c"/>
+    <aura:attribute name="endDateTimeField" type="String" default="CS_End_Date__c"/>
+    <aura:attribute name="descriptionField" type="String" default="CS_Description__c"/>
+    <aura:attribute name="userField" type="String" default="PCC__c"/>
+    <aura:attribute name="filterByUserField" type="Boolean" default="false"/>
+    <aura:attribute name="eventsMap" type="Map"/>
+    <aura:attribute name="calendarButtons" type="String" default="month,agendaWeek,agendaDay"/>
+    <aura:attribute name="weekends" type="Boolean" default="true"/>
+    <aura:attribute name="eventBackgroundColor" type="String" default="#CFEBFE"/>
+    <aura:attribute name="eventBorderColor" type="String" default="#ffffff"/>
+    <aura:attribute name="eventTextColor" type="String" default="#00396b"/>
+    <aura:attribute name="filterFields" type="Map" default="{ 'MD_Day_Location__c': 'null' }"/>
+    <aura:attribute name="clinicProduct" type="String"/>
+    <aura:method name="doSave" action="{!c.doSave}" access="PUBLIC"/>
+
+    <aura:handler name="change" value="{!v.filterFields}" action="{!c.scriptsLoaded}"/>
+    <div class="slds">
+        <div class="slds-card">
+            <c:EventCalendar2 aura:id="EventCalendar"
+                                objectLabel="{!v.sObjectLabel}"
+                                recordId="{!v.recordId}"
+                                events="{!v.eventsMap}"
+                                sObjectName="{!v.sObjectName}"
+                                titleField="{!v.titleField}"
+                                startDateTimeField="{!v.startDateTimeField}"
+                                endDateTimeField="{!v.endDateTimeField}"
+                                descriptionField="{!v.descriptionField}"
+                                userField="{!v.userField}"
+                                calendarButtons="{!v.calendarButtons}"
+                                weekends="{!v.weekends}"
+                                eventBackgroundColor="{!v.eventBackgroundColor}"
+                                eventBorderColor="{!v.eventBorderColor}"
+                                eventTextColor="{!v.eventTextColor}"
+                                clinicProduct="{!v.clinicProduct}"/>
+        </div>
+    </div>
+
+</aura:component>

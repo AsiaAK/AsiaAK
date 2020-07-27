@@ -1,0 +1,47 @@
+<aura:component controller="AppointmentBookingCtrl" implements="lightning:isUrlAddressable" description="PreMedAppointment">
+
+	<!-- component variables -->
+    <aura:attribute name="opportunityId" type="String"/>
+    <aura:attribute name="clinicId" type="String"/>
+
+    <aura:attribute name="range" type="Object" access="private"/>
+    <aura:attribute name="events" type="List" access="private"/>
+    <aura:attribute name="resources" type="List" access="private"/>
+
+    <aura:attribute name="formRecordId" type="String"/>
+    <aura:attribute name="predefinedFields" type="List"/>
+    
+    <aura:attribute name="formFields" type="List" access="private"/>
+
+    <aura:attribute name="asyncProcesses" type="Integer" default="0" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.handlePageReferenceChange}"/>
+    <aura:handler name="change" value="{!v.range}" action="{!c.handleGetAvailabilities}"/>
+
+    <div class="cmp-content">
+        <article class="slds-card" style="height: 100%;">
+            <div class="slds-card__body" style="height: 100%;">
+                <c:Calendar aura:id="calendar"
+                            events="{!v.events}"
+                            resources="{!v.resources}"
+                            onDateRangeChange="{!c.handleDateRangeChange}"
+                            onEventClick="{!c.handleAvailabilityClick}"
+                            onLoading="{!c.handleOnLoading}"/>
+
+                <lightning:spinner variant="brand"
+                                    size="medium"
+                                    alternativeText="Loading..."
+                                    class="{!v.asyncProcesses == 0 ? 'slds-hidden' : ''}"/>
+            </div>
+        </article>
+    </div>
+
+    <lightning:navigation aura:id="navService"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+</aura:component>

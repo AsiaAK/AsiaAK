@@ -1,0 +1,5 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+    
+    <c:InvoiceAttachmentBody payment="{!payment}" opportunity="{!opportunity}"/>
+</apex:component>

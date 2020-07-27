@@ -1,0 +1,34 @@
+<aura:component description="MDDayWizardFooter">
+
+    <aura:attribute name="steps" type="List"/>
+    <aura:attribute name="step" type="String"/>
+
+    <aura:attribute name="stepNumber" type="Integer" default="-2" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+    <aura:handler name="change" value="{!v.step}" action="{!c.handleStepChange}"/>
+
+    <aura:registerEvent name="onaction" type="c:Event"/>
+
+    <footer class="slds-fade-in-open">
+        <div class="slds-clearfix slds-p-around_small">
+            <div class="slds-float_left">
+                <aura:if isTrue="{!v.stepNumber == -1}">
+                    <lightning:button aura:id="ERRORBACK" label="Back" variant="neutral" onclick="{!c.handleActionButtonClick}"/>
+                </aura:if>
+                <aura:if isTrue="{!greaterthanorequal(v.stepNumber, 0)}">
+                    <lightning:button aura:id="BACK" label="Previous" variant="neutral" onclick="{!c.handleActionButtonClick}"/>
+                </aura:if>
+            </div>
+            <div class="slds-float_right">
+                <aura:if isTrue="{!and(greaterthan(v.stepNumber, -1), lessthan(v.stepNumber, v.steps.length - 1))}">
+                    <lightning:button aura:id="NEXT" label="Next" variant="brand" onclick="{!c.handleActionButtonClick}"/>
+                </aura:if>
+                <aura:if isTrue="{!v.stepNumber == v.steps.length - 1}">
+                    <lightning:button aura:id="FINISH" label="Done" variant="brand" onclick="{!c.handleActionButtonClick}"/>
+                </aura:if>
+            </div>
+        </div>
+    </footer>
+
+</aura:component>

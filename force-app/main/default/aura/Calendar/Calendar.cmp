@@ -1,0 +1,36 @@
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasSObjectName,force:hasRecordId" access="global">
+
+    <ltng:require styles="{!join(',',
+                                    $Resource.FullCalendar + '/css/fullcalendar.min.css',
+                                    $Resource.FullCalendar + '/css/scheduler.min.css')}"
+                  scripts="{!join(',',
+                  				$Resource.FullCalendar + '/js/jquery.min.js',
+                                $Resource.FullCalendar + '/js/moment.min.js',
+                                $Resource.FullCalendar + '/js/moment-timezone.min.js',
+                                $Resource.FullCalendar + '/js/moment-timezone-with-data.min.js',
+                                $Resource.FullCalendar + '/js/fullcalendar.min.js',
+                                $Resource.FullCalendar + '/js/locale-all.js',
+                                $Resource.FullCalendar + '/js/scheduler.min.js'	)}"
+                  
+                  afterScriptsLoaded="{!c.handleInitCmp}"/>
+
+	<aura:attribute name="view" type="String" default="month"/>
+	<aura:attribute name="events" type="List"/>
+    <aura:attribute name="resources" type="List"/>
+    <aura:attribute name="showTooltip" type="Boolean" default="false"/>
+
+    <aura:attribute name="fullCalendar" type="Object" access="private"/>
+
+	<aura:handler name="change" value="{!v.events}" action="{!c.handleEventsChange}"/>
+    <aura:handler name="change" value="{!v.resources}" action="{!c.handleResourcesChange}"/>
+
+	<aura:registerEvent name="onDateRangeChange" type="c:Event"/>
+	<aura:registerEvent name="onEventClick" type="c:Event"/>
+	<aura:registerEvent name="onDayClick" type="c:Event"/>
+    <aura:registerEvent name="onLoading" type="c:Event"/>
+
+    <div aura:id="body-container" class="body-container">
+        <div aura:id="calendar" id="calendar" class="calendar-container"></div>
+    </div>
+
+</aura:component>

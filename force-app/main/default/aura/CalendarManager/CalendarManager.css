@@ -1,0 +1,58 @@
+.THIS.cmp-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateZ(0);
+}
+
+.THIS .cmp-body-grid {
+    height: 100%;
+}
+
+.THIS .cmp-body-grid-item {
+    height: 100%;
+}
+
+.THIS .legend-blue {
+    background-color:blue;
+    border-color:blue;
+    color:white;
+}
+
+.THIS .legend-red {
+    background-color:red;
+    border-color:red;
+    color:white;
+}
+
+.THIS .legend-yellow {
+    background-color:yellow;
+    border-color:yellow;
+    color:black;
+}
+
+.THIS .legend-purple {
+    background-color:purple;
+    border-color:purple;
+    color:white;
+}
+
+.THIS .legend-orange {
+    background-color:orange;
+    border-color:orange;
+    color:white;
+}
+
+.THIS .legend-green {
+    background-color:green;
+    border-color:green;
+    color:white;
+}
+
+.THIS .legend-grey {
+    background-color:grey;
+    border-color:grey;
+    color:white;
+}

@@ -1,0 +1,58 @@
+<apex:page controller="SaferpayResultController" sidebar="false" showHeader="false" action="{!checkPayment}">
+    <apex:pagemessages escape="false"/>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.5/moment-timezone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      document.cookie = "debug_logs=debug_logs; path=/; domain=.force.com; value=debug_logs" ;
+      var myJq = jQuery.noConflict();
+      /**
+       * Check if current user has authorized this application.
+       */
+      function checkAuth() {
+        if("{!paidSuccessfully}" == "YES") {
+            var token = {
+                access_token: '{!accessToken}'
+            };
+            gapi.auth.setToken(token);
+            loadCalendarApi();
+        }
+      }
+
+      /**
+       * Load Google Calendar client library. List upcoming events
+       * once client library is loaded.
+       */
+      function loadCalendarApi() {
+        gapi.client.load('calendar', 'v3', updateEvent);
+      }
+
+      function updateEvent() {
+            var selectedEvent= {
+                start: {
+                    dateTime : moment('{!opportunity.AppointmentDate__c}').tz("{!opportunity.CalendarTimeZone__c}").format('YYYY-MM-DDTH:m:sZ')
+                },
+                end: {
+                    dateTime : moment('{!opportunity.AppointmentDate__c}').tz("{!opportunity.CalendarTimeZone__c}").add(1, 'h').format('YYYY-MM-DDTH:m:sZ')
+                },
+                summary: '{!clinicKeyword}_B_{!opportunity.Id}'
+            }
+            var request = gapi.client.calendar.events.update({
+                'calendarId': '{!opportunity.ClinicCalendarIdAuto__c}',
+                'eventId': '{!opportunity.ClinicCalendarEventId__c}',
+                'resource': selectedEvent
+            });
+        
+            request.execute(function(resp) {
+                console.log(resp);
+                if("{!tranzactionSucceded}" == "YES") {
+                    window.location.href = "https://my.medidate.de/register";
+                }
+            });
+        }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
+    
+</apex:page>

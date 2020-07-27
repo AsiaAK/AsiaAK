@@ -1,0 +1,158 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:300"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Bezahlen und bestätigen Sie jetzt Ihren Termin!</title>
+            <style type="text/css">
+                @import url("http://fonts.googleapis.com/css?family=Roboto:300");
+                /* Client-specific Styles */
+                #outlook a {padding:0;} /* Force Outlook to provide a "view in browser" menu link. */
+                body{font-family: 'Roboto', serif; width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}
+                /* Prevent Webkit and Windows Mobile platforms from changing default font sizes, while not breaking desktop design. */
+                .ExternalClass {width:100%;} /* Force Hotmail to display emails at full width */
+                .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;} /* Force Hotmail to display normal line spacing.*/
+                #backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}
+                img {outline:none; text-decoration:none;border:none; -ms-interpolation-mode: bicubic;}
+                a img {border:none;}
+                .image_fix {display:block;}
+                p {margin: 0px 0px !important;}
+                table td {border-collapse: collapse;}
+                table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+                a {color: #0a8cce;text-decoration: none;text-decoration:none!important;}
+                /*STYLES*/
+                table[class=full] { width: 100%; clear: both; }
+                /* This sets elements to 100% width and fixes the height issues too, a god send */
+                *[class="100p"] {width:100% !important; height:auto !important;}
+                /*IPAD STYLES*/
+                @media only screen and (max-width: 640px) {
+                    a[href^="tel"], a[href^="sms"] {
+                        text-decoration: none;
+                        color: #0a8cce; /* or whatever your want */
+
+                        cursor: default;
+                    }
+                    .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                        text-decoration: default;
+                        color: #0a8cce !important;
+                        pointer-events: auto;
+                        cursor: default;
+                    }
+                    table[class=devicewidth] {width: 440px!important;text-align:left!important;}
+                    table[class=devicewidthinner] {width: 420px!important;text-align:left!important;}
+                    img[class=banner] {width: 440px!important;height:226px!important;}
+                    img[class=banner2] {width: 420px!important;height:378px!important;}
+                    img[class=logos] {width: 332px!important;height:46px!important;}
+                    img[class=shadow] {width: 440px!important;height:8px!important;}
+                    img[class=wallet] {width: 440px!important;height:55px!important;}
+                    img[class=colimg2] {width: 440px!important;height:220px!important;}
+                    img[class=separator] {width: 440px!important;height:26px!important;}
+                    img[class=separator2] {width: 440px!important;height:1px!important;}
+
+                }
+                /*IPHONE STYLES*/
+                @media only screen and (max-width: 480px) {
+                    a[href^="tel"], a[href^="sms"] {
+                        text-decoration: none;
+                        color: #0a8cce; /* or whatever your want */
+
+                        cursor: default;
+                    }
+                    .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+                        text-decoration: default;
+                        color: #0a8cce !important;
+                        pointer-events: auto;
+                        cursor: default;
+                    }
+                    table[class=devicewidth] {width: 320px!important;text-align:left!important;}
+                    table[class=devicewidthinner] {width: 260px!important;text-align:left!important;}
+                    img[class=banner] {width: 320px!important;height:164px!important;}
+                    img[class=banner2] {width: 300px!important;height:270px!important;}
+                    img[class=logos] {width: 250px!important;height:35px!important;}
+                    img[class=shadow] {width: 320px!important;height:6px!important;}
+                    img[class=wallet] {width: 320px!important;height:40px!important;}
+                    img[class=colimg2] {width: 320px!important;height:140px!important;}
+                    img[class=separator] {width: 320px!important;height:19px!important;}
+                    img[class=separator2] {width: 320px!important;height:1px!important;}
+                    td[class=mobile-hide]{display:none!important;}
+                    td[class="padding-bottom25"]{padding-bottom:25px!important;}
+
+                }
+                /*--- Preheader declaration in style block in addition to inline for Outlook */
+                .preheader { display:none !important; visibility:hidden; opacity:0; color:transparent; height:0; width:0; }
+                span[class=map-link] a{color: #1F636A!important; font-weight:bold!important; font-family: Verdana, arial, sans-serif!important; text-decoration: none!important;}
+            </style>
+        </head>
+        <table style="padding: 10px 5px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="bodycopy innerpadding-all" style="color: #333333; font-family: Verdana, arial, sans-serif; line-height: 25px; font-size: 14px; padding: 15px;"><br />{!opportunity.Account.EmailGreeting__c},<br /><br />wie vereinbart, habe ich Ihnen einen verbindlichen Beratungstermin bei {!opportunity.ClinicProduct__r.ClinicOperationSurgeonName__c} am&nbsp; <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText> um&nbsp;<apex:outputField value="{!opportunity.EmailAppointmentTime__c}" /> Uhr reserviert.<br /><br />
+                    WICHTIG:<br />
+                    Dieser privatärztliche Termin wird, wie bei anderen Fachärzten Landesweit auch, nach der Gebührenverordnung für Ärzte mit {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} abgerechnet.<br></br><br></br>
+                    Mit Klick auf den Button können Sie die Gebühr bequem und sicher bezahlen:
+                    <br /><br />
+                                <table width="200" border="0" align="center" cellspacing="0" cellpadding="10" bgcolor="#1f636a" style="border-radius: 0.1em;">
+                                    <tbody>
+                                        <tr>
+                                            <td width="150" height="30" align="center" style="color:#FFFFFF; line-height: 30px; font-family: Verdana, arial, sans-serif; font-size:14px;">
+                                                <div class="imgpop">
+                                                    <a href="{!SUBSTITUTE(HTMLENCODE(payment.LegacyPaymentLink__c),'amp;amp;','')}" name="generic_btn1" style="text-decoration: none; color: #ffffff;" target="_blank"><font face="'Verdana', Arial, sans-serif">Jetzt bezahlen</font></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                    <br /><br />
+                    oder per Banküberweisung an:
+                    <br /><br />
+                    <p>eHealth MediDate GmbH</p>
+                    <p>DE18 1005 0000 0190 4913 37</p>
+                    <p>BELADEBEXXX</p>
+                    <p>Berliner Sparkasse</p>
+                    <br/>
+                    Bitte geben Sie bei der Überweisung folgenden Verwendungszweck an: <b>{!payment.Customer_Bank_Transfer_ID__c}</b>.
+                    <br></br><br></br>
+                    Ich bitte Sie, diesen Betrag innerhalb eines Tages zu bezahlen. Ansonsten wird Ihr Termin an einen anderen Patienten vergeben. 
+                    <br></br><br></br>
+                    Ich habe Ihnen hier noch mal alle Informationen zusammengestellt:<br></br><br></br>
+                    <b>Ihre Klinik:</b> <a style="color: inherit;" href="{!opportunity.EmailBrochure__c}" target="_blank"><font>{!opportunity.Clinic__r.Name}</font> </a> <br />
+                    <div class="googlemaps">
+                        <a style="font-family: Verdana, arial, sans-serif; color: inherit;" href="https://maps.google.com/maps?q={!opportunity.Clinic__r.ShippingStreet},+{!opportunity.Clinic__r.ShippingPostalCode},+{!opportunity.Clinic__r.ShippingCity}" target="_blank">
+                        <font face="'Verdana', arial, sans-serif">{!opportunity.Clinic__r.ShippingStreet}, {!opportunity.Clinic__r.ShippingPostalCode} {!opportunity.Clinic__r.ShippingCity}</font>
+                        </a>
+                    </div>
+                    <b>Ihre Behandlung: </b>{!opportunity.EmailClinicOperationName__c}<br />
+                    <b>Ihr MediDate Preis: </b>{!opportunity.EmailClinicOperationMedidatePrice__c}*<br></br><br></br>
+                    <i> <small>*Es handelt sich um eine individuelle medizinische Leistung, bei der die Preise variieren können. Die Kosten werden individuell nach sachlich-medizinischen Kriterien kalkuliert (gemäß GOÄ). Der Preis in diesem Angebot gibt die zu erwartenden Rechnungskosten bei Behandlung an.</small></i><br></br><br></br>                   
+                    <b>Sie erhalten folgende exklusive MediDate-Vorteile:</b>
+                    <ul>
+                    <li><b>Höchste medizinische Qualität!</b> Für Ihr Wunschergebnis arbeiten wir ausschließlich mit den führenden Fachärzten für Plastisch-Ästhetische Chirurgie zusammen</li><br />
+                    <li><b>Ausgezeichnete Patientenzufriedenheit!</b> Bereits mehr als 25.000 zufriedene Patienten haben wir erfolgreich begleitet</li><br />
+                    <li><b>Attraktive Vorteilspreise!</b> Sparen Sie bei Ihrer Premiumbehandlung</li><br />
+                    <li><b>Wir sind für Sie da!</b> MediDate bietet Ihnen eine umfassende Beratung und Betreuung, sowie eine kostenlose Folgekostenversicherung und eine attraktive 0% Finanzierung</li><br />
+                    </ul>
+
+                    Mit herzlichen Grüßen,<br /><br />{!opportunity.Owner.Name}<br /> MediDate Ästhetik-Experte
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+
+        <td class="innerpadding footer" style="padding: 0 15px 0; font-family: Verdana, arial, sans-serif; line-height: 25px; font-size: 12px;" bgcolor="#FFFFFF"><a style="text-decoration: none; color: #999999;" href="tel:+493022011993">  <!-- <img src="{!Lead.EmailCallAgentImageURL__c}" alt="agent_picture" border="0" width="100" style="display:block; border:none; outline:none; text-decoration:none;"/> --> </a>
+        </td >
+        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td style="padding: 15px; color: #1f636a; font-family: Verdana, arial, sans-serif; line-height: 24px; font-size: 12px;" align="left"><br />eHealth MediDate GmbH <br />Torstr. 35 – 10119 Berlin<br /> <a style="text-decoration: none; color: #1f636a;" href="tel:+493022011993">0171/ 49 00 988</a><br /> <a style="color: #1f636a; text-decoration: none;" href="mailto:kundenbetreuung@medidate.de">kundenbetreuung@medidate.de </a> </td>  <br /><br />
+                </tr>
+                    <tr>
+                        <img style="padding: 15px; height: auto;" src="https://medi-date.appspot.com/mail/logo-ehealth-medidate-gmbh.png" alt="eHealth MediDate GmbH Logo" width="172" height="24" border="0"></img>
+                    </tr>
+            </tbody>
+        </table>
+    </html>
+</apex:component>

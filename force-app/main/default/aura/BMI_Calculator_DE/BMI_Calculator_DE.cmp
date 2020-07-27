@@ -1,0 +1,27 @@
+<!--BMICalculator-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute name="num1" type="Decimal"/>
+    <aura:attribute name="num2" type="Decimal"/>
+    <aura:attribute name="num3" type="Decimal"/><br/>
+    <aura:attribute name="isAdd" type="Boolean" default="false"/>
+    <aura:attribute name="isRefresh" type="Boolean" default="false"/>
+    
+    <lightning:card title="BMI Rechner"> 
+        <div class="slds-p-left_medium slds-p-right_medium">
+       
+        <lightning:input label="Gewicht in Kilogramm" value="{!v.num1}"/><br/>
+    <lightning:input label="Körpergröße in Zentimetern" value="{!v.num2}"/><br/>
+    <aura:if isTrue="{!v.isAdd}">
+        BMI =  {!num3}
+        <ui:outputNumber value="{!v.num3}"/>
+    </aura:if>
+     
+    
+    <br/>
+    <ui:button press="{!c.addAction}" label="BMI rechnen" />
+    <aura:if isTrue="{!v.isRefresh}">
+        <ui:button press="{!c.refreshAction}" label="Erneut rechnen" />
+    </aura:if>
+            </div>
+    </lightning:card>
+</aura:component>

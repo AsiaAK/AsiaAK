@@ -1,0 +1,22 @@
+<apex:page showHeader="false" applyBodyTag="false">
+    <html>
+        <head>
+            <style>
+                @page {
+                  size: A4;
+                  margin: 0;
+                }
+                @media print {
+                  html, body {
+                    width: 210mm;
+                    height: 297mm;
+                  }
+                  /* ... the rest of the rules ... */
+                }
+             </style>
+         </head>
+        <body>
+            <c:LetterPayment PaymentId="{!$CurrentPage.parameters.Id}"/>
+        </body>
+    </html>
+</apex:page>

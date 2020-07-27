@@ -1,0 +1,223 @@
+<aura:component controller="RecordFormCtrl" description="RecordForm">
+
+	<aura:attribute name="sectionFields" type="List"/>
+    <aura:attribute name="formValidation" type="Object"/>
+
+    <aura:attribute name="enableInnerSpinner" type="Boolean" default="true"/>
+	<aura:attribute name="asyncProcesses" type="Integer" default="0" access="private"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+
+    <aura:registerEvent name="onaction" type="c:Event"/>
+
+	<aura:method name="validateForm" action="{!c.handleValidateForm}">
+    </aura:method>
+
+    <ui:scrollerWrapper class="record-form-scroll slds-m-around_small">
+        <div class="record-form slds-is-relative">
+            <lightning:spinner variant="brand" alternativeText="Loading..." class="{!v.asyncProcesses == 0 ? 'slds-hidden' : ''}"/>
+
+            <div class="record-form-body">
+                <aura:iteration items="{!v.sectionFields}" var="section">
+                    <aura:if isTrue="{!section.render == true}">
+                        <div class="slds-section slds-is-open">
+                            <aura:if isTrue="{!not(empty(section.label))}">
+                                <h3 class="slds-section__title slds-theme_shade">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="{!section.label}">{!section.label}</span>
+                                </h3>
+                            </aura:if>
+
+                            <div aria-hidden="false" class="slds-section__content">
+                                <div class="slds-form" role="list">
+                                    <aura:iteration items="{!section.rows}" var="row">
+                                        <aura:if isTrue="{!row.render == true}">
+                                            <div class="slds-form__row">
+                                                <aura:iteration items="{!row.fields}" var="field">
+                                                    <div class="slds-form__item" role="listitem">
+                                                        <aura:if isTrue="{!field.render == true}">
+                                                            <aura:if isTrue="{!field.type == 'STRING'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="text"
+                                                                                    name="{!field.name}"
+                                                                                    label="{!field.label}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'PHONE'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="tel"
+                                                                                    name="{!field.name}"
+                                                                                    label="{!field.label}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'EMAIL'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="email"
+                                                                                    name="{!field.name}"
+                                                                                    label="{!field.label}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'TEXTAREA'}">
+                                                                <lightning:textarea aura:id="field"
+                                                                                    name="{!field.name}"
+                                                                                    value="{!field.value}" 
+                                                                                    label="{!field.label}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'INTEGER'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="number"
+                                                                                    name="{!field.inputName}"
+                                                                                    label="{!field.label}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!or(field.type == 'PICKLIST', field.type == 'COMBOBOX')}">
+                                                                <lightning:combobox aura:id="field"
+                                                                                    name="{!field.name}"
+                                                                                    label="{!field.label}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    options="{!field.options}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'DATE'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="date"
+                                                                                    name="{!field.inputName}"
+                                                                                    label="{!field.label}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'DATETIME'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="datetime"
+                                                                                    name="{!field.inputName}"
+                                                                                    label="{!field.label}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    min="{!field.min}"
+                                                                                    max="{!field.max}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'TIME'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="time"
+                                                                                    name="{!field.name}"
+                                                                                    label="{!field.label}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    value="{!field.value}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'BOOLEAN'}">
+                                                                <lightning:input aura:id="field"
+                                                                                    type="checkbox"
+                                                                                    name="{!field.name}"
+                                                                                    label="{!field.label}"
+                                                                                    checked="{!field.value}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    readonly="{!field.readonly}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+
+                                                            <aura:if isTrue="{!field.type == 'REFERENCE'}">
+                                                                <c:strike_lookup aura:id="field"
+                                                                                    filter="{!field.filter}"
+                                                                                    limit="5"
+                                                                                    loadingMessage="Loading..."
+                                                                                    errorMessage="Invalid input"
+                                                                                    label="{!field.label}"
+                                                                                    iconName="{!field.iconName}"
+                                                                                    object="{!field.objectName}"
+                                                                                    searchField="{!field.searchField}"
+                                                                                    subtitleField="{!field.subtitleField}"
+                                                                                    required="{!field.required}"
+                                                                                    disabled="{!field.disabled}"
+                                                                                    value="{!field.value}"
+                                                                                    placeholder="{!field.placeholder}"
+                                                                                    class="{!join(' ',
+                                                                                                'slds-form-element_stacked',
+                                                                                                if(field.readonly, 'slds-form-element_readonly', 'slds-is-editing'))}"/>
+                                                            </aura:if>
+                                                        </aura:if>
+                                                    </div>
+                                                </aura:iteration>
+                                            </div>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                </aura:iteration>
+            </div>
+        </div>
+    </ui:scrollerWrapper>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+</aura:component>

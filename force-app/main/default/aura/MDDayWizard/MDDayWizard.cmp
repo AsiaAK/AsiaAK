@@ -1,0 +1,52 @@
+<aura:component controller="MDDayWizardCtrl" implements="lightning:isUrlAddressable" description="MDDayWizard">
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="mdDayRecordTypeId" type="String"/>
+    <aura:attribute name="mdDayRecordTypeName" type="String"/>
+
+    <aura:attribute name="step" type="String" default="error"/>
+    <aura:attribute name="steps" type="List" default="['mdDay', 'mdDayRepetitionRule']" access="private"/>
+    <aura:attribute name="mdDayformFields" type="List" access="private"/>
+    <aura:attribute name="mdDayRepetitionRuleFormFields" type="List" access="private"/>
+    <aura:attribute name="asyncProcesses" type="Integer" default="0" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.handlePageReferenceChange}"/>
+
+    <aura:handler name="onaction" event="c:Event" action="{!c.handleAction}"/>
+
+    <lightning:layout multipleRows="true" verticalAlign="start" class="mddw-app">
+
+        <lightning:layoutItem flexibility="auto" size="12" class="section">
+            <div aura:id="sectionMain" class="section-item-main">
+                <aura:if isTrue="{!v.step == 'mdDay'}">
+                    <c:MDDay aura:id="mdDay"
+                            recordId="{!v.recordId}"
+                            sObjectName="{!v.sObjectName}"
+                            mdDayRecordTypeId="{!v.mdDayRecordTypeId}"
+                            mdDayRecordTypeName="{!v.mdDayRecordTypeName}"
+                            formFields="{!v.mdDayformFields}"/>
+                </aura:if>
+
+                <aura:if isTrue="{!v.step == 'mdDayRepetitionRule'}">
+                    <c:MDDayRepetitionRule aura:id="mdDayRepetitionRule"
+                                            formFields="{!v.mdDayRepetitionRuleFormFields}"
+                                            mdDayformFields="{!v.mdDayformFields}"/>
+                </aura:if>
+            </div>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem flexibility="auto" size="12" class="section">
+            <c:MDDayWizardFooter steps="{!v.steps}" step="{!v.step}"/>
+        </lightning:layoutItem>
+
+        <lightning:spinner variant="brand" size="medium" alternativeText="Loading..." class="{!v.asyncProcesses == 0 ? 'slds-hidden' : ''}"/>
+
+    </lightning:layout>
+
+    <lightning:navigation aura:id="navService"/>
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+</aura:component>

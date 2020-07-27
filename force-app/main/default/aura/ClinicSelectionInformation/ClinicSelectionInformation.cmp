@@ -1,0 +1,324 @@
+<aura:component implements="force:hasRecordId" controller="ClinicSelectionInformationController" >
+	<aura:attribute name="info" type="Object"/>
+	<aura:attribute access="private" name="allValid" type="Boolean" default="true"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:method name="doSave" action="{!c.doSave}" access="PUBLIC"/>
+	<aura:registerEvent name="endUpdateEvent" type="c:EndUpdateEvent"/>
+
+	<div class="medidate slds-grid slds-page-header__detail-row">
+		<article class="medidate slds-card slds-size--1-of-1">
+			<header class="medidate slds-card__header slds-grid" style="background-color:#f3f5f8;padding-bottom:0.75rem;padding-left:1rem;">
+				<div class="medidate slds-tile slds-media">
+					<div class="medidate slds-media__figure">
+						<lightning:icon iconName="action:add_contact" />
+					</div>
+					<div class="medidate slds-media__body">
+						<h3 class="medidate slds-truncate" ><a href="javascript:void(0);">{!$Label.c.Customer_Information}</a></h3>
+						<div class="medidate slds-tile__detail slds-text-body--small">
+							<ul class="medidate slds-list--horizontal slds-has-dividers--right">
+								<li class="medidate slds-item">{!$Label.c.Get_Details}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div class="medidate slds-card__body slds-p-around--small" style="background-color: white;">
+				<div class="medidate slds-size--1-of-1">
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-grid">
+								<div class="medidate slds-form-element slds-size--2-of-5">
+									<div class="medidate slds-form-element__control">
+										<lightning:select label="{!v.info.salutation.label}" value="{!v.info.salutation.value}" required="true" >
+											<aura:iteration items="{!v.info.salutation.values}" var="e">
+												<option value="{!e.value}" selected="{!e==v.info.salutation.value}">{!e.label}</option>
+											</aura:iteration>
+										</lightning:select>
+									</div>
+								</div>
+								<div class="medidate slds-form-element slds-size--3-of-5">
+									<div class="medidate slds-form-element__control">
+										<lightning:input aura:id="fieldId"  label="{!v.info.firstName.label}" value="{!v.info.firstName.value}" required="true"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input label="{!v.info.street.label}" value="{!v.info.street.value}"/>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.contactAgree.label}" value="{!v.info.contactAgree.value}" required="true" >
+										<aura:iteration items="{!v.info.contactAgree.values}" var="e">
+											<option value="{!e.value}" selected="{!e==v.info.contactAgree.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input aura:id="fieldId" label="{!v.info.lastName.label}" value="{!v.info.lastName.value}" required="true"/>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input label="{!v.info.city.label}" value="{!v.info.city.value}"/>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input label="{!v.info.contactAgreeDetails.label}" value="{!v.info.contactAgreeDetails.value}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input aura:id="fieldId" type="tel" label="{!v.info.phone.label}" value="{!v.info.phone.value}" required="true"/>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input label="{!v.info.postalCode.label}" value="{!v.info.postalCode.value}"/>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.paymentType.label}" value="{!v.info.paymentType.value}" required="true" >
+										<aura:iteration items="{!v.info.paymentType.values}" var="e">
+											<option value="{!e.value}" selected="{!e==v.info.paymentType.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input type="tel" label="{!v.info.mobilePhone.label}" value="{!v.info.mobilePhone.value}"/>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input label="{!v.info.countryCode.label}" value="{!v.info.countryCode.value}"/>
+								</div>
+							</div>
+						</div>
+						<div aura:id="profession" class="medidate slds-col--padded slds-size--1-of-3" >
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input label="{!v.info.profession.label}" value="{!v.info.profession.value}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.healthInsurance.label}" value="{!v.info.healthInsurance.value}" required="true" >
+										<aura:iteration items="{!v.info.healthInsurance.values}" var="e">
+											<option value="{!e.value}" selected="{!e==v.info.healthInsurance.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<label class="slds-form-element__label">
+										<abbr class="slds-required" title="required" >*</abbr>
+										<span class="" >{!v.info.dateofBirth.label}</span>
+									</label>
+									<ui:inputDate aura:id="dateofBirth" label=""
+												  value="{!v.info.dateofBirth.value}" displayDatePicker="true"
+												  required="true" change="{!c.checkDateofBirth}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input aura:id="fieldId" type="email" label="{!v.info.email.label}" value="{!v.info.email.value}" required="true"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+	<div class="medidate slds-grid slds-page-header__detail-row">
+		<article class="medidate slds-card slds-size--1-of-1">
+			<header class="medidate slds-card__header slds-grid" style="background-color:#f3f5f8;padding-bottom:0.75rem;padding-left:1rem;">
+				<div class="medidate slds-tile slds-media">
+					<div class="medidate slds-media__figure">
+						<lightning:icon iconName="action:description" />
+					</div>
+					<div class="medidate slds-media__body">
+						<h3 class="medidate slds-truncate" ><a href="javascript:void(0);">{!$Label.c.Customer_Information}</a></h3>
+						<div class="medidate slds-tile__detail slds-text-body--small">
+							<ul class="medidate slds-list--horizontal slds-has-dividers--right">
+								<li class="medidate slds-item">{!$Label.c.Anamnese}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</header>
+			<div class="medidate slds-card__body slds-p-around--small" style="background-color: white;">
+				<div class="medidate slds-size--1-of-1">
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.healthCondition.label}" value="{!v.info.healthCondition.value}">
+										<option value="" selected="{!value==v.info.healthInsurance.value}">{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.healthCondition.values}" var="e">
+											<option value="{!e.value}" selected="{!e.value==v.info.healthCondition.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.contraceptive.label}" value="{!v.info.contraceptive.value}">
+										<option value="" selected="{!value==v.info.contraceptive.value}">{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.contraceptive.values}" var="e">
+											<option value="{!e.value}" selected="{!e.value==v.info.contraceptive.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<label class="slds-form-element__label" style="margin-bottom: 0.25rem;">
+										<span class="" >{!v.info.smoker.label}</span>
+									</label>
+									<ui:inputCheckbox label="" value="{!v.info.smoker.value}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:input type="number"  label="{!v.info.BMI.label}" value="{!v.info.BMI.value}" required="false" step="0.01" />
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.nhs.label}" value="{!v.info.nhs.value}">
+										<option value="" selected="{!value==v.info.nhs.value}">{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.nhs.values}" var="e">
+											<option value="{!e.value}"  selected="{!e.value==v.info.nhs.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.anesthesia.label}" value="{!v.info.anesthesia.value}">
+										<option value="" selected="{!value==v.info.anesthesia.value}">{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.anesthesia.values}" var="e">
+											<option value="{!e.value}" selected="{!e.value==v.info.anesthesia.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+					</div>
+                    <!--***********************-->
+                    <div class="medidate slds-grid slds-grid--pull-padded">
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.copeWellWithAnaesthesia.label}" value="{!v.info.copeWellWithAnaesthesia.value}">
+										<option value="" selected="{!value==v.info.copeWellWithAnaesthesia.value}">{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.copeWellWithAnaesthesia.values}" var="e">
+											<option value="{!e.value}"  selected="{!e.value==v.info.copeWellWithAnaesthesia.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<lightning:select label="{!v.info.allergies.label}" value="{!v.info.allergies.value}">
+										<option value="" selected="{!value==v.info.allergies.value}">{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.allergies.values}" var="e">
+											<option value="{!e.value}"  selected="{!e.value==v.info.allergies.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+						<div class="medidate slds-col--padded slds-size--1-of-3">
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">                       
+									<lightning:select label="{!v.info.familyPlanning.label}" value="{!v.info.familyPlanning.value}">                                        
+										<option value="" >{!$Label.c.NoneValue}</option>
+										<aura:iteration items="{!v.info.familyPlanning.values}" var="e">
+											<option value="{!e.value}" selected="{!e.value==v.info.familyPlanning.value}">{!e.label}</option>
+										</aura:iteration>
+									</lightning:select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--***********************-->  
+                    <div class="medidate slds-grid slds-grid--pull-padded">
+                        <div aura:id="comments" class="medidate slds-col--padded slds-size--1-of-3" >
+							<div class="medidate slds-form-element">
+								<div class="medidate slds-form-element__control">
+									<label class="slds-form-element__label">
+										<span class="" >{!v.info.comments.label}</span>
+									</label>
+									<ui:inputTextArea label="" value="{!v.info.comments.value}" rows="3"/>
+								</div>
+							</div>
+						</div>
+                    </div>                       
+				</div>
+			</div>
+		</article>
+	</div>
+</aura:component>

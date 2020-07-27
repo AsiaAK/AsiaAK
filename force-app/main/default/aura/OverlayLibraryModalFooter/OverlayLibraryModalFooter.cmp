@@ -1,0 +1,17 @@
+<aura:component description="OverlayLibraryModalFooter">
+
+    <aura:attribute name="cancelButtonLabel" type="String" default="Cancel"/>
+    <aura:attribute name="okButtonLabel" type="String" default="Ok"/>
+    <aura:attribute name="data" type="Object"/>
+
+    <aura:registerEvent name="onaction" type="c:Event"/>
+
+	<aura:method name="close" action="{!c.handleClose}">
+    </aura:method>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:button name="cancel" label="{!v.cancelButtonLabel}" onclick="{!c.handleCancel}"/>
+    <lightning:button name="ok" label="{!v.okButtonLabel}" variant="brand" onclick="{!c.handleOk}"/>
+
+</aura:component>

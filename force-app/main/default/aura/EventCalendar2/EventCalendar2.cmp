@@ -1,0 +1,47 @@
+<aura:component controller="AnyEventCalCtrl2" implements="flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes" access="global">
+    <ltng:require styles="{!$Resource.AnyEventCal + '/fullcalendar.min.css'}"/>
+    <aura:attribute name="events" type="Map"/>
+    <aura:attribute name="eventsArray" type="Array"/>
+    <aura:attribute name="objectLabel" type="String"/>
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="titleField" type="String"/>
+    <aura:attribute name="startDateTimeField" type="String"/>
+    <aura:attribute name="endDateTimeField" type="String"/>
+    <aura:attribute name="descriptionField" type="String"/>
+    <aura:attribute name="userField" type="String"/>
+    <aura:attribute name="calendarButtons" type="String"/>
+    <aura:attribute name="weekends" type="Boolean"/>
+    <aura:attribute name="eventBackgroundColor" type="String"/>
+    <aura:attribute name="eventBorderColor" type="String"/>
+    <aura:attribute name="eventTextColor" type="String"/>
+    <aura:attribute name="clinicProduct" type="String"/>
+    <aura:attribute name="idVal" type="String"/>
+    <aura:attribute name="titleVal" type="String"/>
+    <aura:attribute name="descriptionVal" type="String"/>
+    <aura:attribute name="priority" type="Decimal"/>
+    <aura:attribute name="appDate" type="String"/>
+    <aura:attribute name="startDateTimeVal" type="DateTime"/>
+    <aura:attribute name="endDateTimeVal" type="DateTime"/>
+    <aura:attribute name="newOrEdit" type="String" default="New"/>
+    <aura:attribute name="filterFields" type="Map"/>
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="simpleRecord" type="Object"/>
+    <aura:attribute name="clinic" type="String"/>
+
+
+    <aura:handler name="change" value="{!v.events}" action="{!c.renderCalendar}"/>
+    <aura:method name="renderCalendar" action="{!c.renderCalendar}" access="PUBLIC"/>
+    <aura:method name="doSave" action="{!c.doSave}" access="PUBLIC"/>
+
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.simpleRecord}" />
+
+    <aura:handler event="c:ReturnAppointmentDetailEvent" action="{!c.setModalWidowData}"/>
+
+    <div id="{!v.recordId}" class="anyCalendar"></div>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+</aura:component>

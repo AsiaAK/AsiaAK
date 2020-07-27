@@ -1,0 +1,183 @@
+<aura:component controller="RecordEditCtrl" description="MDDayRepetitionRule">
+
+	<!-- component variables -->
+    <aura:attribute name="formFields" type="List"/>
+    <aura:attribute name="mdDayformFields" type="List"/>
+
+    <aura:attribute name="config" type="Object" access="private"/>
+    <aura:attribute name="asyncProcesses" type="Integer" default="0" access="private"/>
+	<!-- /component variables -->
+
+    <!-- component handle events -->
+    <aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+    <!-- /component handle events -->
+
+    <!-- component handle events -->
+    <aura:registerEvent name="onaction" type="c:Event"/>
+    <!-- /component handle events -->
+
+	<!-- component methods -->
+	<aura:method name="saveRecord" action="{!c.handleSaveRecord}">
+        <aura:attribute name="fields" type="List"/>
+        <aura:attribute name="recordId" type="String"/>
+        <aura:attribute name="recordType" type="String"/>
+        <aura:attribute name="objectType" type="String"/>
+        <aura:attribute name="callback" type="Function"/>
+    </aura:method>
+
+	<aura:method name="validateForm" action="{!c.handleValidateForm}">
+    </aura:method>
+	<!-- /component methods -->
+
+    <!-- component content -->
+    <aura:if isTrue="{!v.config.mode == 'RecordEdit'}">
+        <ui:scrollerWrapper class="record-edit-scroll slds-box slds-box_x-small slds-m-around_small">
+            <lightning:layout multipleRows="true" verticalAlign="start" class="record-edit slds-fade-in-open slds-is-relative">
+                <!-- component main -->
+                <lightning:layoutItem size="12" class="record-edit-main">
+                    <lightning:layout class="slds-form slds-form_stacked" verticalAlign="start" multipleRows="true">
+                        <aura:iteration items="{!v.formFields}" var="field">
+                            <lightning:layoutItem size="12"
+                                                    largeDeviceSize="{!field.largeDeviceSize}"
+                                                    mediumDeviceSize="{!field.mediumDeviceSize}"
+                                                    class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small slds-align_absolute-center field-input">
+                                <aura:if isTrue="{!field.type == 'STRING'}">
+                                    <lightning:input aura:id="field"
+                                                        type="text"
+                                                        name="{!field.name}"
+                                                        label="{!field.label}"
+                                                        placeholder="{!field.placeholder}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'PHONE'}">
+                                    <lightning:input aura:id="field"
+                                                        type="tel"
+                                                        name="{!field.name}"
+                                                        label="{!field.label}"
+                                                        placeholder="{!field.placeholder}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'EMAIL'}">
+                                    <lightning:input aura:id="field"
+                                                        type="email"
+                                                        name="{!field.name}"
+                                                        label="{!field.label}"
+                                                        placeholder="{!field.placeholder}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'TEXTAREA'}">
+                                    <lightning:textarea aura:id="field"
+                                                        name="{!field.name}"
+                                                        value="{!field.value}" 
+                                                        label="{!field.label}"
+                                                        placeholder="{!field.placeholder}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'INTEGER'}">
+                                    <lightning:input aura:id="field"
+                                                        type="number"
+                                                        name="{!field.inputName}"
+                                                        label="{!field.label}"
+                                                        placeholder="{!field.placeholder}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!or(field.type == 'PICKLIST', field.type == 'COMBOBOX')}">
+                                    <lightning:combobox aura:id="field"
+                                                        name="{!field.name}"
+                                                        label="{!field.label}"
+                                                        placeholder="{!field.placeholder}"
+                                                        value="{!field.value}"
+                                                        options="{!field.options}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        onchange="{!c.handleOnChangeRepetition}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'DATE'}">
+                                    <lightning:input aura:id="field"
+                                                        type="date"
+                                                        name="{!field.inputName}"
+                                                        label="{!field.label}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"
+                                                        onchange="{!c.handleOnChangeDate}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'DATETIME'}">
+                                    <lightning:input aura:id="field"
+                                                        type="datetime"
+                                                        name="{!field.inputName}"
+                                                        label="{!field.label}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"/>
+                                </aura:if>
+
+                                
+
+                                <aura:if isTrue="{!field.type == 'TIME'}">
+                                    <lightning:input aura:id="field"
+                                                        type="time"
+                                                        name="{!field.name}"
+                                                        label="{!field.label}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'BOOLEAN'}">
+                                    <lightning:input aura:id="field"
+                                                        type="checkbox"
+                                                        name="{!field.name}"
+                                                        label="{!field.label}"
+                                                        checked="{!field.value}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        onchange="{!c.handleOnChangeCheckbox}"/>
+                                </aura:if>
+
+                                <aura:if isTrue="{!field.type == 'REFERENCE'}">
+                                    <c:strike_lookup aura:id="field"
+                                                        filter="{!field.filter}"
+                                                        limit="5"
+                                                        loadingMessage="Loading..."
+                                                        errorMessage="Invalid input"
+                                                        label="{!field.label}"
+                                                        iconName="{!field.iconName}"
+                                                        object="{!field.objectName}"
+                                                        searchField="{!field.searchField}"
+                                                        subtitleField="{!field.subtitleField}"
+                                                        required="{!field.required}"
+                                                        disabled="{!field.disabled}"
+                                                        value="{!field.value}"
+                                                        placeholder="{!field.placeholder}"
+                                                        class="{!field.class}"/>
+                                </aura:if>
+                            </lightning:layoutItem>
+                        </aura:iteration>
+                    </lightning:layout>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </ui:scrollerWrapper>
+    </aura:if>
+
+    <!-- notification service -->
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <!-- /component content -->
+
+</aura:component>

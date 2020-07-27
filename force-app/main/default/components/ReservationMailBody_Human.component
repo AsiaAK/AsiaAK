@@ -1,0 +1,111 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}" />
+
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:300"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="format-detection" content="telephone=no"/>
+        <title>Bezahlen und bestätigen Sie jetzt Ihren Termin!</title>
+        <style type="text/css">
+            @import url("http://fonts.googleapis.com/css?family=Roboto:300");
+            #outlook a{padding:0}body{font-family:'Roboto',serif;width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0; ;padding:0}
+            .ExternalClass{width:100%}.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.ExternalClass td,.ExternalClass div{line-height:100%}
+            img{outline:0;text-decoration:none;border:0;-ms-interpolation-mode:bicubic}a img{border:0}p{margin:0 0 !important}
+            table td{border-collapse:collapse}table{border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0}
+            a{color:#0a8cce;text-decoration:none;text-decoration:none !important}@media only screen and (max-width:640px){
+                a[href^="tel"],a[href^="sms"]{text-decoration:none;color:#0a8cce;cursor:default}
+                .mobile_link a[href^="tel"],.mobile_link a[href^="sms"]{text-decoration:initial;color:#0a8cce !important;pointer-events:auto;cursor:default}}
+        </style>
+    </head>
+    <body>
+    <table style="margin : 0; padding: 0; width: 100% !important; line-height: 25px; !important; font-family: 'Roboto', Verdana, arial, sans-serif; font-size: 16px; max-width: 1000px;"
+           border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <td style="padding: 15px 10px;">
+                <img src="https://cdn.medidate.com/img/MedidateLogoNew.png" alt="eHealth Medidate GmbH"  width="200px" />
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 15px 10px;">
+                {!opportunity.Account.EmailGreeting__c},<br />
+                <br />
+                wie vereinbart, habe ich Ihnen einen verbindlichen Beratungstermin bei
+                {!opportunity.ClinicProduct__r.ClinicOperationSurgeonName__c} am&nbsp;
+                <apex:outputText value="{0,date,dd.MM.YYYY}">
+                    <apex:param value="{!opportunity.AppointmentDate__c}" />
+                </apex:outputText>
+                um&nbsp;<apex:outputField value="{!opportunity.EmailAppointmentTime__c}" />
+                Uhr reserviert.<br />
+                <br />
+                WICHTIG:<br />
+                Dieser privatärztliche Termin wird, wie bei anderen Fachärzten Landesweit auch, nach der Gebührenverordnung für Ärzte mit {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} abgerechnet.<br />
+                <br />
+                Mit Klick auf den Button können Sie die Gebühr bequem und sicher bezahlen:<br />
+                <br />
+                <div style="text-align: center; margin: auto;">
+                    <a href="{!SUBSTITUTE(HTMLENCODE(payment.LegacyPaymentLink__c),'amp;amp;','')}" name="generic_btn1" style="text-decoration: none;" target="_blank">
+                        <div style="border-radius:0.1em;background-color:#1f636a;color:#FFF;width:200px;line-height:40px;margin: 10px auto;">Jetzt bezahlen</div>
+                        <img width="332" border="0" alt="Logos" style="display:block; outline:none; text-decoration:none; margin: auto;" src="https://medi-date.appspot.com/mail/Logos.png" class="logos"/>
+                    </a>
+                </div>
+                <br />
+                oder per Banküberweisung an:<br />
+                <br />
+                eHealth MediDate GmbH<br />
+                DE18&nbsp;1005&nbsp;0000&nbsp;0190&nbsp;4913&nbsp;37<br />
+                BELADEBEXXX<br />
+                Berliner Sparkasse<br />
+                <br />
+                Bitte geben Sie bei der Überweisung folgenden Verwendungszweck an: <b>{!payment.Customer_Bank_Transfer_ID__c}</b>.<br />
+                <br />
+                Ich bitte Sie, diesen Betrag innerhalb eines Tages zu bezahlen. Ansonsten wird Ihr Termin an einen anderen Patienten vergeben. <br />
+                <br />
+                Ich habe Ihnen hier noch mal alle Informationen zusammengestellt:<br />
+                <br />
+                <b>Ihre Klinik:</b> <a href="{!opportunity.EmailBrochure__c}" style="color:#0a8cce;text-decoration:none;" target="_blank">{!opportunity.Clinic__r.Name} </a><br />
+                <a href="https://maps.google.com/maps?q={!opportunity.Clinic__r.ShippingStreet},+{!opportunity.Clinic__r.ShippingPostalCode},+{!opportunity.Clinic__r.ShippingCity}" style="color:#0a8cce;text-decoration:none;" target="_blank">
+                    {!opportunity.Clinic__r.ShippingStreet}, {!opportunity.Clinic__r.ShippingPostalCode} {!opportunity.Clinic__r.ShippingCity}
+                </a><br />
+                <b>Ihre Behandlung: </b>{!opportunity.EmailClinicOperationName__c}<br />
+                <b>Ihr MediDate Preis: </b>{!opportunity.EmailClinicOperationMedidatePrice__c}*<br />
+                <br />
+                <i>
+                    <small>*Es handelt sich um eine individuelle medizinische Leistung, bei der die Preise variieren können. Die Kosten werden individuell nach sachlich-medizinischen Kriterien kalkuliert (gemäß GOÄ). Der Preis in diesem Angebot gibt die zu erwartenden Rechnungskosten bei Behandlung
+                        an.
+                    </small>
+                </i><br />
+                <br />
+                <b>Sie erhalten folgende exklusive MediDate-Vorteile:</b>
+                <ul>
+                    <li><b>Höchste medizinische Qualität!</b> Für Ihr Wunschergebnis arbeiten wir ausschließlich mit den führenden Fachärzten für Plastisch-Ästhetische Chirurgie zusammen<br /><br /></li>
+                    <li><b>Ausgezeichnete Patientenzufriedenheit!</b> Bereits mehr als 25.000 zufriedene Patienten haben wir erfolgreich begleitet<br /><br /></li>
+                    <li><b>Attraktive Vorteilspreise!</b> Sparen Sie bei Ihrer Premiumbehandlung<br /><br /></li>
+                    <li><b>Wir sind für Sie da!</b> MediDate bietet Ihnen eine umfassende Beratung und Betreuung, sowie eine kostenlose Folgekostenversicherung und eine attraktive 0% Finanzierung</li>
+                </ul>
+                <br />
+                Mit herzlichen Grüßen,<br />
+                <br />
+                {!opportunity.Owner.Name}<br />
+                MediDate Ästhetik-Experte
+            </td>
+        </tr>
+        <tr>
+            <td style="color: #1f636a; padding: 15px 10px;">
+                eHealth MediDate GmbH<br />
+                Torstr. 35 – 10119 Berlin<br />
+                <a style="text-decoration: none; color: #1f636a;" href="tel:+493030809549">
+                    030 / 308 095 49
+                </a><br />
+                <a style="color: #1f636a; text-decoration: none;" href="mailto:kundenbetreuung@medidate.de">
+                    kundenbetreuung@medidate.de
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </body>
+    </html>
+</apex:component>

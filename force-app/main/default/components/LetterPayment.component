@@ -1,0 +1,92 @@
+<apex:component access="global" controller="InvoiceController">
+    <apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+<apex:panelGroup layout="none" rendered="{!(payment.InvoiceNumberAuto__c == null || (payment.InvoiceNumberAuto__c != null && opportunity.PaymentType__c != 'Post-Payment'))}">
+    <div style="position:relative; margin : 0in 0in 1.1in 0in;height: 297mm;color: #716D6C;font-family: Arial, sans-serif;font-size: 9pt;">
+    <div style="padding: 150px 80px 0 80px;">
+        <table width="100%;">
+            <tr>
+                <td width="70%" valign="top">
+                    <div style="color: #716D6C">
+                        <p style="margin:0;padding:0">eHealth MediDate GmbH, Torstr. 35, 10119 Berlin</p>
+                    </div>  
+                </td>
+                <td align="right">
+                    <img src="{!$Resource.MedidateLogo}" alt="logo" border="0" width="200" height="26" style="display:block; border:none; outline:none; text-decoration:none;"/><br/>
+                </td>   
+            </tr>
+        </table>
+        <div style="align:left">
+            - Terminreservierung -<br/>
+            {!opportunity.Account.Salutation}<br/>
+            {!opportunity.Account.FirstName} {!opportunity.Account.LastName}<br/>
+            {!opportunity.Account.BillingStreet}<br/>
+            {!opportunity.Account.BillingPostalCode} {!opportunity.Account.BillingCity}
+        </div>
+        <br/><br/><br/><br/>
+        <div style="font-size: 21pt;">Vielen Dank für Ihre Reservierung</div>
+        <br/><br/>
+        <p>{!opportunity.Account.EmailGreeting__c},</p>
+        <p>wir freuen uns, dass Sie sich für MediDate entschieden haben und dass wir Sie auf Ihrem Weg zu einem neuen Lebensgefühl begleiten dürfen.</p>
+        <br/><br/>
+        
+        <table width="100%;" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="50%" style="background-color:#e8eff0;border-right:2px dashed #ffffff">
+                    <div style="text-align:center;position:relative">
+                        <p style="margin:0;padding:0;font-size: 14pt;color:#1F626A;padding-top:35px;">Ihre Klinik</p>
+                        <img src="{!URLFOR($Resource.PaymentLetter, 'IconLetter1.jpg')}" style="top:-32px;left:125px;width:65px;display:block; border:none; outline:none; text-decoration:none;position:absolute"/>
+                    </div>
+                    <div style="padding: 20px;line-height:24px;color: #716D6C;font-size: 10pt">
+                        {!opportunity.Clinic__r.Name}<br/>
+                        {!opportunity.Clinic__r.ShippingStreet}<br/>
+                        {!opportunity.Clinic__r.ShippingPostalCode} {!opportunity.Clinic__r.ShippingCity}
+                    </div>
+                </td>
+                <td align="center" style="background-color:#e8eff0" valign="top">
+                    <div style="position:relative">
+                        <p style="margin:0;padding:0;font-size: 14pt;color:#1F626A;padding-top:35px;">Ihr Termin</p>
+                        <img src="{!URLFOR($Resource.PaymentLetter, 'iconletter2.jpg')}" style="top:-32px;left:120px;width:65px;display:block; border:none; outline:none; text-decoration:none;position:absolute"/>
+                    </div>
+                    <div style="padding: 20px;line-height:24px;color: #716D6C;font-size: 10pt">
+                        {!opportunity.AppointmentWeekDay__c}, <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText><br/>
+                        <!--<apex:outputText value="{0,date,HH:mm}"><apex:param value="{!opportunity.AppointmentDateCET__c}" /></apex:outputText> Uhr-->
+                        <apex:outputField value="{!opportunity.EmailAppointmentTime__c}"/>Uhr
+                    </div>  
+                </td>
+            </tr>
+            <apex:panelGroup layout="none" rendered="{!(opportunity.DateNoContact__c != null || opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung')}">
+            <tr>   
+                <td colspan="2" style="padding: 0 30px 0 30px;color: #e8eff0">
+                    <div style="background-color: #1f626a; padding: 25px 50px 15px 20px;position:relative;overflow:auto">
+                        <img src="{!URLFOR($Resource.PaymentLetter, 'mark.jpg')}" style="top:-16px;left:268px;width:36px;display:block; border:none; outline:none; text-decoration:none;position:absolute"/>
+                        <apex:panelGroup layout="none" rendered="{!(opportunity.DateNoContact__c != null)}">
+                        <div style="overflow:auto;padding-bottom:12px;clear:both">
+                            <div style=" float:left"><img src="{!URLFOR($Resource.PaymentLetter, 'eye.png')}" style="width:20px;display:block; border:none; outline:none; text-decoration:none;line-height:13px"/></div>
+                            <div style="float:left; padding-left:10px; line-height:13px; width:90%">Bitte tragen Sie ab dem <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.DateNoContact__c}" /></apex:outputText> keine Kontaktlinsen mehr.</div>
+                        </div><br/>
+                        </apex:panelGroup>
+                        <apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.RecordType.DeveloperName == 'Lasik')}">
+                        <div style="overflow:auto;clear:both">
+                            <div style=" float:left"><img src="{!URLFOR($Resource.PaymentLetter, 'iconletter.png')}" style="width:20px;display:block; border:none; outline:none; text-decoration:none;line-height:13px"/></div>
+                            <div style="float:left; padding-left:10px; line-height:13px">Beachten Sie, dass Sie nach der Untersuchung nicht mit dem Auto fahren dürfen.</div>
+                        </div><br/>
+                        </apex:panelGroup>
+                    </div>  
+                </td>   
+            </tr>
+            </apex:panelGroup>
+        </table>
+        <br/><br/>
+        <div>Sollten Sie noch Fragen oder Anregungen haben, stehen wir Ihnen gern zur Verfügung und freuen uns über Ihren Anruf.</div><br/><br/><br/><br/>
+        <div>Vielen Dank</div>
+        <div>Ihr MediDate-Team</div>
+        </div>
+        <div style="position:absolute; bottom:0; background-color: #1f626a; width:100%; height:55px; empty-cells:show;color:#e8eff0;text-align:center;">
+            <br/>
+            <apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Body'}">030 / 567 962 06</apex:panelGroup><apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Lasik'}">030 / 567 962 06</apex:panelGroup>  -  medidate.de  -  kundenbetreuung@medidate.de
+        </div>
+
+</div>
+
+</apex:panelGroup>
+</apex:component>

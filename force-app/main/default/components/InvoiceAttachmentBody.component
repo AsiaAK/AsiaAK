@@ -1,0 +1,418 @@
+<apex:component access="global">
+
+<apex:attribute name="payment" type="Payment__c" description="the Payment" />
+<apex:attribute name="opportunity" type="Opportunity" description="the Payment Opportunity"/>
+
+<apex:panelGroup layout="none" rendered="{!(payment.InvoiceNumberAuto__c != null)}">
+    <div class="invoiceDiv" style="position:relative; height: 297mm; margin:0;font-family: Arial Unicode MS, sans-serif;font-size:9pt;">
+           <div style="margin : 0.2in .7in .1in .7in;">
+                <table width="100%">
+                    <tr>
+                        <td width="70%">
+                            <div style="font-size:23px;">
+                                <p style="color:#767676;margin:0;padding:0">eHealth MediDate GmbH</p>
+                            </div>  
+                        </td>
+                        <td align="right">
+                            <img src="{!$Resource.MedidateLogo}" alt="logo" border="0" width="200" height="26" style="display:block; border:none; outline:none; text-decoration:none;"/><br/>
+                        </td>   
+                    </tr>
+                </table>
+            </div>  
+            <hr style="height:2px;border-width:0;color:#1f636a;background-color:#1f636a;margin:0;width:100%"/>   
+            <br/>
+            <div style="margin : 0.3in .7in .1in .7in;">
+                <table width="100%">
+                    <tr>
+                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' ||  payment.TransactionStatus__c == 'Refunded')}">
+                        <td width="70%">
+                            <br/>
+                            <br/>
+                            eHealth MediDate GmbH, Torstr. 35, 10119 Berlin <br/><br/><br/>
+                            - Terminreservierung - <br/>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Account.Salutation}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Account.FirstName} {!opportunity.Account.LastName}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Account.BillingStreet}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Account.BillingPostalCode} {!opportunity.Account.BillingCity}</p>
+                        </td>
+                        </apex:panelGroup>
+                        <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                        <td width="70%">
+                            <br/>
+                            <br/>
+                            eHealth MediDate GmbH, Torstr. 35, 10119 Berlin <br/><br/><br/>
+                            <br/>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Clinic__r.Name}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Clinic__r.BillingStreet}</p>
+                            <p style="margin-bottom:2px;margin-top:0px">{!opportunity.Clinic__r.BillingPostalCode} {!opportunity.Clinic__r.BillingCity}</p>
+                        </td>
+                        </apex:panelGroup>
+                        <td rowspan="2">
+                            <table>
+                                <tr>
+                                    <td align="right">
+                                        <p style="margin-bottom:2px;margin-top:0px">E-Mail</p>
+                                    </td>
+                                    <td width="5%">
+                                    </td>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">kundenbetreuung@medidate.com</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"> 
+                                        <p style="margin-bottom:2px;margin-top:0px">Servicenummer</p>
+                                    </td>
+                                    <td/>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">
+                                        <apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Body'}">030 / 308 095 49</apex:panelGroup><apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Lasik'}">030 / 308 095 49</apex:panelGroup>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <p style="margin-bottom:2px;margin-top:0px">Mo - Fr</p>
+                                    </td>
+                                    <td/>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">08:30 - 20:00 Uhr</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <p style="margin-bottom:2px;margin-top:0px">Sa</p>
+                                    </td>
+                                    <td/>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">10:00 - 18:00 Uhr</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' ||  payment.TransactionStatus__c == 'Refunded')}">
+                                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">Rechnungsnr.</p>
+                                    </td>
+                                    </apex:panelGroup>
+                                     <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Refunded')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px"></p>
+                                    </td>
+                                    </apex:panelGroup>
+                                    </apex:panelGroup>
+                                     <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px"></p>
+                                    </td>
+                                    </apex:panelGroup>
+                                    <td/>
+                                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' ||  payment.TransactionStatus__c == 'Credit note')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">{!payment.InvoiceNumberAuto__c}</p>
+                                    </td>
+                                    </apex:panelGroup>
+                                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Refunded')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">S-{!payment.InvoiceNumberAuto__c}</p>
+                                    </td>
+                                    </apex:panelGroup>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td/>
+                                    <td>
+                                        bitte bei Zahlungen und
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td/>
+                                    <td>
+                                        Rückfragen angeben
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                <tr>
+                                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">Rechnungsdatum</p>
+                                    </td>
+                                    </apex:panelGroup>
+                                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Refunded')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">Stornodatum</p>
+                                    </td>
+                                    </apex:panelGroup>
+                                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c = 'Credit note')}">
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px"></p>
+                                    </td>
+                                    </apex:panelGroup>
+                                    <td/>
+                                    <td>
+                                        <p style="margin-bottom:2px;margin-top:0px">
+                                        <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!payment.OpportunityAppointmentDate__c}" /></apex:outputText>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid')}">
+                        <td>    
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>RECHNUNG {!payment.InvoiceNumberAuto__c}</b></p>
+                        </td> 
+                    </apex:panelGroup>
+                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Refunded')}">
+                        <td>    
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>STORNORECHNUNG  S-{!payment.InvoiceNumberAuto__c}</b></p>
+                        </td> 
+                    </apex:panelGroup>
+                    <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                        <td>    
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Leistungsübersicht {!payment.InvoiceNumberAuto__c}</b></p>
+                        </td> 
+                    </apex:panelGroup>
+                    </tr>
+                </table> 
+                <br/>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' ||  payment.TransactionStatus__c == 'Refunded')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">{!opportunity.Account.EmailGreeting__c},</p>
+                </apex:panelGroup>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Sehr geehrte Damen und Herren,</p>
+                </apex:panelGroup>
+                <br/>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">für Ihren Termin zur Voruntersuchung am&nbsp;
+                <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText> erlauben wir uns Ihnen folgenden Betrag in Rechnung zu stellen: </p>
+                </apex:panelGroup>
+                
+                 <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Refunded')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">wir schreiben Ihnen folgenden Betrag aus "{!payment.InvoiceNumberAuto__c}" gut. </p>
+                </apex:panelGroup>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                <apex:panelGroup layout="none" rendered="{!(opportunity.Account.Salutation == 'Herr')}">
+                <apex:panelGroup layout="none" rendered="{!(payment.Paid_Payment__r.InvoiceNumberAuto__c != null)}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">für die Voruntersuchung von Herrn {!opportunity.Account.Name} ({!payment.Paid_Payment__r.InvoiceNumberAuto__c}) am&nbsp;
+                <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText>&nbsp;überweisen wir Ihnen folgenden Betrag: </p>
+                </apex:panelGroup>
+                <apex:panelGroup layout="none" rendered="{!(payment.Paid_Payment__r.InvoiceNumberAuto__c == null)}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">für die Voruntersuchung von {!opportunity.Account.Salutation} {!opportunity.Account.Name} am&nbsp;
+                <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText>&nbsp;überweisen wir Ihnen folgenden Betrag: </p>
+                </apex:panelGroup>
+                </apex:panelGroup>
+                </apex:panelGroup>
+                
+                
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                <apex:panelGroup layout="none" rendered="{!(opportunity.Account.Salutation != 'Herr')}">
+                <apex:panelGroup layout="none" rendered="{!(payment.Paid_Payment__r.InvoiceNumberAuto__c != null)}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">für die Voruntersuchung von Herrn {!opportunity.Account.Name} ({!payment.Paid_Payment__r.InvoiceNumberAuto__c}) am&nbsp;
+                <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText>&nbsp;überweisen wir Ihnen folgenden Betrag: </p>
+                </apex:panelGroup>
+                <apex:panelGroup layout="none" rendered="{!(payment.Paid_Payment__r.InvoiceNumberAuto__c == null)}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">für die Voruntersuchung von {!opportunity.Account.Salutation} {!opportunity.Account.Name} am&nbsp;
+                <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText>&nbsp;überweisen wir Ihnen folgenden Betrag: </p>
+                </apex:panelGroup>
+                </apex:panelGroup>
+                </apex:panelGroup>
+                
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <!--apex:repeat value="{!opportunity.OpportunityLineItems}" var="item" id="theRepeat" rendered="{!opportunity.RecordType.DeveloperName != 'Body'}">
+                    <tr>
+                        <td align="left">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">{!item.Product2.Name}</p>
+                        </td>
+                        <td width="20%" align="right">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">{!item.TotalPrice} {!payment.CurrencyIsoCode}</p>
+                        </td>
+                    </tr>
+                    </apex:repeat-->
+                    <tr>
+                        <td align="left" style="border-bottom:0.5px solid black;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Gesamtsumme</b></p>
+                        </td>
+                        <td width="20%" align="right" style="border-bottom:0.5px solid black;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>{!payment.PaymentAmount__c} {!payment.CurrencyIsoCode}</b></p>
+                        </td>
+                    </tr>
+                    <apex:panelGroup layout="none" rendered="{!opportunity.RecordType.DeveloperName == 'Body'}">
+                    <tr>
+                        <td align="left">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Nettosumme</b></p>
+                        </td>
+                        <td width="20%" align="right">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>{!payment.PaymentNetAmount__c} {!payment.CurrencyIsoCode}</b></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>zzgl. MwSt</b></p>
+                        </td>
+                        <td width="20%" align="right">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>{!payment.PaymentVATAmount__c} {!payment.CurrencyIsoCode}</b></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Bruttosumme</b></p>
+                        </td>
+                        <td width="20%" align="right">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>{!payment.PaymentAmount__c} {!payment.CurrencyIsoCode}</b></p>
+                        </td>
+                    </tr>
+                    </apex:panelGroup>
+                </table> 
+                <br/><br/>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Credit note')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Dieses Dokument ist keine Rechnung.</p>
+                </apex:panelGroup>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' ||  payment.TransactionStatus__c == 'Refunded')}">
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid')}">
+                
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' &&  payment.Invoice_on_behalf_of__c!= 'MediDate')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Diese Rechnung wird im Namen von {!payment.ClinicNameAuto__c} erstellt.</p> </apex:panelGroup> <!--Bitte überweisen Sie den
+                Betrag i. H. von {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} unter Angabe der Rechnungsnummer per Banküberweisung oder bequem
+                per Kreditkarte, PayPal oder "SOFORT-Überweisung": </p>
+                
+                
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid' &&  payment.Invoice_on_behalf_of__c== 'MediDate')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">Bitte überweisen Sie den
+                Betrag i. H. von {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} unter Angabe der Rechnungsnummer per Banküberweisung oder bequem
+                per Kreditkarte, PayPal oder "SOFORT-Überweisung": </p>
+                </apex:panelGroup>
+                <br/>
+                <table width="100%" style="border:1px solid black;border-collapse:collapse;width:100%">
+                    <tr>
+                        <td style="padding:5px 0px 5px 15px;border:1px solid black;border-collapse:collapse;">
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Bankverbindung</b></p> <br/> 
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>eHealth MediDate GmbH</b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>DE18 1005 0000 0190 4913 37</b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>BELADEBEXXX</b></p>
+                            <p style="font-size:10pt;margin-bottom:2px;margin-top:0px"><b>Berliner Sparkasse</b></p>
+                        </td> 
+                        <td valign="top" style="padding:5px 0px 5px 15px;margin-left:5px;border:1px solid black;border-collapse:collapse;">
+                        
+                        </td>
+                    </tr>
+                </table> -->
+                 </apex:panelGroup>
+                <br/><br/>
+                <apex:panelGroup layout="none" rendered="{!opportunity.RecordType.DeveloperName != 'Body'}">
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Paid')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    Diese Rechnung wurde erstellt im Auftrag von:
+                </p>
+                </apex:panelGroup>
+                <apex:panelGroup layout="none" rendered="{!(payment.TransactionStatus__c == 'Refunded')}">
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    Diese Stornorechnung wurde erstellt im Auftrag von:
+                </p>
+                </apex:panelGroup>
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    {!opportunity.Clinic__r.Name}
+                </p>
+                 <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    {!opportunity.Clinic__r.ShippingStreet}, {!opportunity.Clinic__r.ShippingPostalCode} {!opportunity.Clinic__r.ShippingCity}
+                </p>
+                <br/><br/>
+                </apex:panelGroup>
+                </apex:panelGroup>
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    Mit freundlichen Grüßen
+                </p>
+                <p style="font-size:10pt;margin-bottom:2px;margin-top:0px">
+                    Ihre eHealth MediDate GmbH
+                </p>
+            </div>
+            <br/>
+            <div class="footer" style="position:absolute; bottom:0;font-size:80%; width:100%; page-break-after: always;">
+                <center>
+                    <div style="margin : 0.3in .7in .1in .7in;">
+                        <table width="100%">
+                            <tr>
+                                <td colspan="5">
+                                     <hr style="height:0.5px;border-width:0;color:black;background-color:black;margin:0;width:100%"/>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    Anschrift:
+                                </td>
+                                <td align="left">
+                                    Geschäftsführer:
+                                </td>
+                                <td align="left">
+                                    Handelsregister:
+                                </td>
+                                <td align="left">
+                                    USt-IdNr:
+                                </td>
+                                <td align="left">
+                                    Bankverbindung:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    eHealth MediDate GmbH
+                                </td>
+                                <td align="left">
+                                    Eiko Gerten
+                                </td>
+                                <td align="left">
+                                    AG Charlottenburg
+                                </td>
+                                <td align="left">
+                                    DE296393874
+                                </td>
+                                <td align="left">
+                                    Berliner Sparkasse
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    Torstr. 35
+                                </td>
+                                <td align="left">
+                                    Nico Kutschenko
+                                </td>
+                                <td align="left">
+                                    HRB: 159029
+                                </td>
+                                <td align="left">
+                                    &nbsp;
+                                </td>
+                                <td align="left">
+                                    IBAN: DE18 1005 0000 0190 4913 37
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    10119 Berlin
+                                </td>
+                                <td align="left">
+                                    Sebastian Vohradnik
+                                </td>
+                                <td/>
+                                <td/>
+                                <td align="left">
+                                    BIC: BELADEBEXXX
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </center>
+            </div>
+    </div>
+</apex:panelGroup>
+</apex:component>

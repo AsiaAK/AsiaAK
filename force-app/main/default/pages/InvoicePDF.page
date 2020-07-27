@@ -1,0 +1,30 @@
+<apex:page showHeader="false" renderAs="pdf" applyBodyTag="false" applyHtmlTag="false" language="de">
+    <html>
+        <head>
+            <style>
+                @page {
+                  size: A4;
+                  margin : 0;
+                 
+                }
+                div.footer {
+		            font-size:80%;
+		        }  
+                @media print {
+                  html, body {
+                    width: 210mm;
+                    height: 297mm;
+                    margin: 0;
+                  }
+                  /* ... the rest of the rules ... */
+                }
+                body{margin:0; padding:0}
+                .invoiceDiv{page-break-after: always;}
+             </style>
+         </head>
+        <body>
+            <c:InvoiceAttachment PaymentId="{!$CurrentPage.parameters.Id}"/>
+            <c:LetterPayment PaymentId="{!$CurrentPage.parameters.Id}"/>
+        </body>
+    </html>
+</apex:page>

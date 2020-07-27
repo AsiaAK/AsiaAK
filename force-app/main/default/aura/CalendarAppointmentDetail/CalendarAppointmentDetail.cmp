@@ -1,0 +1,24 @@
+<aura:component description="CalendarAppointmentDetail" access="global">
+    <aura:attribute access="public" name="eventId" type="String"/>
+    <aura:attribute access="public" name="titleVal" type="String"/>
+    <aura:attribute access="public" name="descriptionVal" type="String"/>
+    <aura:attribute access="public" name="startDateTimeVal" type="String"/>
+    <aura:attribute access="public" name="endDateTimeVal" type="String"/>
+    <aura:registerEvent name="returnAppointmentDetailEvent" type="c:ReturnAppointmentDetailEvent"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <div class="slds-modal__content slds-p-around--medium">
+        <div class="slds-form--stacked">
+            <ui:inputText aura:id="title" label="Title" value="{!v.titleVal}" />
+
+            <ui:inputTextArea aura:id="description" label="Description" value="{!v.descriptionVal}" rows="5"/>
+
+            <ui:inputDateTime aura:id="startTime" label="Start Time" class="field" value="{!v.startDateTimeVal}" displayDatePicker="true" disabled="true"/>
+
+            <ui:inputDateTime aura:id="endTime" label="End Time" class="field" value="{!v.endDateTimeVal}" displayDatePicker="true" disabled="true"/>
+        </div>
+    </div>
+    <div class="slds-float_right">
+        <lightning:button class="slds-text-align--right" onclick="{!c.onSave}" label="{!$Label.c.SaveBtn}" variant="brand"/>
+    </div>
+</aura:component>

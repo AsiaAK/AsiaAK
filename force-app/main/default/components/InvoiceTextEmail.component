@@ -1,0 +1,74 @@
+<apex:component access="global" controller="InvoiceController">
+<apex:attribute name="PaymentId" type="String" description="the Payment Id" assignTo="{!PayId}"/>
+Bitte bestätigen Sie Ihren Termin innerhalb der nächsten 3 Tage
+
+Fragen Sie unsere Experten
+<apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Body'}">
+030 / 308 095 49
+</apex:panelGroup>
+<apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Lasik'}">
+030 / 308 095 49
+</apex:panelGroup>
+Mo-Fr 8:30 bis 20 Uhr / Sa 10 bis 18 Uhr 
+
+Ihr Termin ist reserviert!
+Bitte bestätigen Sie Ihren Termin innerhalb der nächsten 7
+
+Calendar <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.AppointmentDate__c}" /></apex:outputText> 
+Time <apex:outputText value="{0,date,HH:mm}"> <apex:param value="{!opportunity.AppointmentDateCET__c}" /></apex:outputText> Uhr
+
+Location {!opportunity.Clinic__r.Name} : {!opportunity.Clinic__r.ShippingStreet}, {!opportunity.Clinic__r.ShippingPostalCode} {!opportunity.Clinic__r.ShippingCity}
+
+{!opportunity.Account.EmailGreeting__c},
+wir gratulieren Ihnen dazu, den ersten Schritt zu einem neuen Lebensgefühl gewagt zu haben. Zudem bedanken wir und die {!opportunity.Clinic__r.Name} uns für Ihr Vertrauen.
+Um sich Ihren Wunschtermin am zu sichern, müssen Sie diesen bis zum bestätigen.
+
+Wie bestätige ich meinen Wunschtermin?
+Um Ihren Wunschtermin zum attraktiven MediDate-Preis zu bestätigen, ist die Zahlung der Voruntersuchungsgebühr in Höhe von {!payment.PaymentAmount__c} {!payment.CurrencyIsoCode} bis zum <apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!payment.PaymentDueDate__c}" /></apex:outputText> notwendig. Diese können Sie per Banküberweisung, Kreditkarte, PayPal oder Sofortüberweisung bezahlen.
+Jetzt bezahlen
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.PaymentType__c == 'Pre-Payment')}">
+Bankverbindung:
+eHealth MediDate GmbHD
+E18 1005 0000 0190 4913 37
+BELADEBEXXX
+Berliner Sparkasse
+
+Bitte geben Sie bei der Überweisung folgende Referenznummer an: ID-{PROJECTID}-{NUMBERID}. 
+
+</apex:panelGroup>
+
+
+
+Ihre Behandlung im Überblick
+Aktivieren Sie jetzt Ihren myMediDate-Account mit {!opportunity.Account.PersonEmail} und wählen Sie Ihr Passwort
+myMediDate 
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c != 'Voruntersuchung' && opportunity.DateNoContact__c != null)}">
+Wichtige Hinweise
+Tragen Sie ab dem Beginn der Karenzzeit am&nbsp;<apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.DateNoContact__c}" /></apex:outputText> keine Kontaktlinsen mehr.
+</apex:panelGroup>
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.DateNoContact__c != null)}">
+Wichtige Hinweise
+Tragen Sie ab dem Beginn der Karenzzeit am&nbsp;<apex:outputText value="{0,date,dd.MM.YYYY}"><apex:param value="{!opportunity.DateNoContact__c}" /></apex:outputText> keine Kontaktlinsen mehr.
+Beachten Sie, dass Sie nach der Voruntersuchung nicht mit dem Auto fahren dürfen.  
+</apex:panelGroup>
+
+<apex:panelGroup layout="none" rendered="{!(opportunity.ClinicProduct__r.ClinicOperationsAppointmentType__c == 'Voruntersuchung' && opportunity.DateNoContact__c == null)}">
+Wichtige Hinweise
+Beachten Sie, dass Sie nach der Voruntersuchung nicht mit dem Auto fahren dürfen.
+</apex:panelGroup>
+
+Bei Bestätigung Ihres Termins, erhalten Sie einige Tage vor Ihrer Untersuchung einen Anruf Ihres Kundenberaters, bei dem Sie letzte Fragen klären können.
+
+Wir freuen uns darauf von Ihnen zu hören
+Ihr MediDate-Team
+
+{!opportunity.Owner.Name} 
+Ihr persönlicher Ansprechpartner
+MediDate-Patientenbetreuung
+
+eHealth MediDate GmbH Torstraße 35, 10119 Berlin kundenbetreuung@medidate.de <apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Body'}">030 / 308 095 49</apex:panelGroup><apex:panelGroup style="none" rendered="{!opportunity.RecordType.DeveloperName == 'Lasik'}">030 / 308 095 49</apex:panelGroup>
+Never publish dirty markup and double check your content before publishing a web article! 
+</apex:component>

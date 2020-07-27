@@ -1,0 +1,55 @@
+<aura:component controller="OpportunityCalendarCtrl" implements="force:appHostable,flexipage:availableForRecordHome,force:hasSObjectName,force:hasRecordId" description="Opportunity Calendar">
+
+	<!-- component variables -->
+    <aura:attribute name="range" type="Object" access="private"/>
+    <aura:attribute name="clinicAppointmentRecordTypes" type="List" access="private"/>
+    <aura:attribute name="events" type="List" access="private"/>
+    <aura:attribute name="resources" type="List" access="private"/>
+    <aura:attribute name="opportunityId" type="List" access="private"/>
+    <aura:attribute name="asyncProcesses" type="Integer" default="0" access="private"/>
+    <aura:attribute name="groupBy" type="String" access="private" default="Doctor"/>
+
+    <!-- component handle events -->
+    <aura:handler name="init" value="{!this}" action="{!c.handleInitCmp}"/>
+
+    <aura:handler name="change" value="{!v.range}" action="{!c.handleGetActivities}"/>
+    <aura:handler name="change" value="{!v.groupBy}" action="{!c.handleGetActivities}"/>
+    <!-- /component handle events -->
+
+    <div class="cmp-content">
+        <article class="slds-card" style="height: 100%;">
+            <div style="height: 100%;">
+                <lightning:layout verticalAlign="start" multipleRows="true" class="cmp-body-grid">
+                    <!-- calendar -->
+                    <lightning:layoutItem size="12"
+                                            largeDeviceSize="12"
+                                            mediumDeviceSize="12"
+                                            class="slds-p-top_x-small slds-p-left_x-small slds-p-right_x-small cmp-body-grid-item">
+                        <c:Calendar aura:id="calendar"
+                                    events="{!v.events}"
+                                    resources="{!v.resources}"
+                                    onDateRangeChange="{!c.handleDateRangeChange}"
+                                    onEventClick="{!c.handleActivityClick}"
+                                    onDayClick="{!c.handleDayClick}"
+                                    onLoading="{!c.handleOnLoading}"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+
+                 <!-- spinner -->
+                <lightning:spinner variant="brand"
+                                    size="medium"
+                                    alternativeText="Loading..."
+                                    class="{!v.asyncProcesses == 0 ? 'slds-hidden' : ''}"/>
+            
+            </div>
+        </article>
+    </div>
+
+    <!-- modal dialog -->
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <!-- notification service -->
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <!-- /component content -->
+
+</aura:component>
