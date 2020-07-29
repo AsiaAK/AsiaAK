@@ -5,7 +5,7 @@
 
     getOpportunity: function(component) {
         var recordId = component.get("v.recordId");
-
+		
         if (!$A.util.isEmpty(recordId)) {
             this.addAsyncProcess(component);
 
@@ -25,10 +25,16 @@
 
                     if (response.status === "success") {
                         var opportunity = response.data.opportunity
-
+						
                         if (!$A.util.isEmpty(opportunity)) {
+                            let ClinicAppointmentField = 'Clinic_Appointment__c';
+                            let OperationDateField = 'OperationDate__c';
+                            if(opportunity.Stage__c =='Confirmed' && opportunity.StageName=='Weight'){
+                                ClinicAppointmentField = 'Balloon_extraction_appointment__c';
+                                OperationDateField = 'Balloon_extraction_date__c';
+                            }
                             var navService = component.find("navService");
-
+								
                             if (!$A.util.isEmpty(navService)) {
                                 var pageReference = {
                                     type: "standard__component",
@@ -37,10 +43,12 @@
                                     },
                                     state: {
                                         c__opportunityId: component.get("v.recordId"),
-                                        c__clinicId: opportunity.Clinic__c
+                                        c__clinicId: opportunity.Clinic__c,
+                                        c__referenceAppointment: ClinicAppointmentField,
+                                        c__referenceDate : OperationDateField
                                     }
                                 };
-
+                                
                                 navService.navigate(pageReference);
                             }
                         } else {

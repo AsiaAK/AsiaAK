@@ -26,6 +26,7 @@
     },
 
 	getFullCalendar: function(component) {
+        let save_action = component.get("c.updateOnDrop");
         var calendarElement = component.find("calendar").getElement();
         if (!$A.util.isEmpty(calendarElement)) {
             var fullCalendar = jQuery(calendarElement).fullCalendar({
@@ -118,7 +119,18 @@
                             }
                         }).fire();
                     }
-				},
+                },
+                eventDrop: function(component) {
+                    console.log(moment.tz(component.start.format("YYYY-MM-DD HH:mm"), $A.get("$Locale.timezone")).toJSON());
+                    var csEndDate = moment.tz(component.end.format("YYYY-MM-DD HH:mm"), $A.get("$Locale.timezone")).toJSON();
+                    var csStartDate = moment.tz(component.start.format("YYYY-MM-DD HH:mm"), $A.get("$Locale.timezone")).toJSON();
+                    save_action.setParams({
+                        "recordId": component.id,
+                        "csStartDate": csStartDate,
+                        "csEndDate": csEndDate
+                    });
+                    $A.enqueueAction(save_action);
+                },
 				dayClick: function(date, jsEvent, view, resourceObj) {
                     if (jsEvent.target.classList.contains("fc-bgevent")) {
                     

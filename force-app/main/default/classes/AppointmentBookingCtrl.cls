@@ -281,7 +281,9 @@ public with sharing class AppointmentBookingCtrl {
         if (opportunityFilter != null && !opportunityFilter.isEmpty()) {
             Set<String> recordQueryFields = new Set<String>{
                     SObjectType.Opportunity.fields.Id.Name,
-                    SObjectType.Opportunity.fields.Clinic__c.Name
+                    SObjectType.Opportunity.fields.Clinic__c.Name,
+                    SObjectType.Opportunity.fields.Record_Type_Name__c.Name,
+                    SObjectType.Opportunity.fields.StageName.Name    
             };
 
             List<String> conditions = new List<String>();

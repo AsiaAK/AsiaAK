@@ -1,4 +1,4 @@
-<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasSObjectName,force:hasRecordId" access="global">
+<aura:component controller="DropController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasSObjectName,force:hasRecordId" access="global">
 
     <ltng:require styles="{!join(',',
                                     $Resource.FullCalendar + '/css/fullcalendar.min.css',
@@ -26,7 +26,7 @@
 
 	<aura:registerEvent name="onDateRangeChange" type="c:Event"/>
 	<aura:registerEvent name="onEventClick" type="c:Event"/>
-	<aura:registerEvent name="onDayClick" type="c:Event"/>
+    <aura:registerEvent name="onDayClick" type="c:Event"/>
     <aura:registerEvent name="onLoading" type="c:Event"/>
 
     <div aura:id="body-container" class="body-container">
